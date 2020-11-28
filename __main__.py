@@ -1,9 +1,12 @@
 import app, world, event_generator
 
 w = world.World()
+w.set_world_background_color([100, 200, 200])
 w.create_world(200, 200)
+w.change_world(1000, 700)
+w.set_world_background_image("bkgs/1.jpg")
 w.change_world_fullscreen()
-w.change_world(300, 300)
+w.change_world(1000, 700)
 
 print(w.get_world_size())
 print(w.get_world_fullscreen())

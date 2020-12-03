@@ -24,7 +24,7 @@ class Sprite_manager():
         self._group.draw(self._window)
 
 
-class SpriteImage(pygame.sprite.DirtySprite):
+class Sprite_image(pygame.sprite.DirtySprite):
     def __init__(self, image, x, y, visible = True, width=None, height=None):
         pygame.sprite.DirtySprite.__init__(self)
 

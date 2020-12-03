@@ -13,7 +13,7 @@ print(w.get_world_size())
 print(w.get_world_fullscreen())
 
 im = pygame.image.load("sprite_types/type1/costumes/1.png")
-s1 = sprite.SpriteImage(im, 500, 500)
+s1 = sprite.Sprite_image(im, 500, 500)
 w.sprite_manager.add_sprite(s1)
 
 eg = event_generator.Event_generator()

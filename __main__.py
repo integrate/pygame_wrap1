@@ -1,24 +1,20 @@
-import app, world, event_generator, sprite
-import pygame
+import pygame, wrap
+from wrap import world, app, event, sprite
 
-w = world.World()
-w.set_world_background_color([100, 200, 200])
-w.create_world(200, 200)
-w.change_world(1000, 700)
-w.set_world_background_image("bkgs/1.jpg")
-w.change_world_fullscreen()
-w.change_world(1000, 700)
+app.set_fps(100)
 
-print(w.get_world_size())
-print(w.get_world_fullscreen())
+# world.set_world_background_color([100, 200, 200])
+# world.set_world_background_image("bkgs/1.jpg")
+world.create_world(1000, 200)
 
-im = pygame.image.load("sprite_types/type1/costumes/1.png")
-s1 = sprite.Sprite_image(im, 500, 500)
-w.sprite_manager.add_sprite(s1)
+sprite.add_sprite(100, 200, True, 100, 100)
 
-eg = event_generator.Event_generator()
+def on_right_clicked(key, unicode, **kwargs):
+    sprite.move_sprite_by(10, 0)
 
-a = app.App(w, eg)
-a.set_fps(100)
+event.on_key_down(pygame.K_RIGHT, on_right_clicked)
 
-a.start()
+
+
+app.start()
+

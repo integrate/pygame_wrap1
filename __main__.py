@@ -25,7 +25,7 @@ def on_close(**kwargs):
 left_id = event.on_key_down(pygame.K_LEFT, on_left_clicked)
 right_id = event.on_key_down(pygame.K_RIGHT, on_right_clicked)
 space_id = event.on_key_down(pygame.K_SPACE, on_space_clicked)
-
 close_id = event.on_close(on_close)
+
 app.start()
 

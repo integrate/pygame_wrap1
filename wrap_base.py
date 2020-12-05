@@ -2,7 +2,7 @@ import pygame
 
 pygame.init()
 
-import app, world, event_generator, message_broker, sprite
+import app, world, event_generator, message_broker
 
 world = world.World()
 

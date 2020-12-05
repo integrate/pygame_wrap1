@@ -1,3 +1,6 @@
+import environ_data
+
+
 class Condition_checker():
     def confirms(self):
         assert False, "Condition_checker class confirms() method is abstract and must be overriden"
@@ -5,14 +8,16 @@ class Condition_checker():
 
 
 class Condition_checker_pygame_event(Condition_checker):
-    def __init__(self, environ_data, pygame_event_filter):
+    def __init__(self, pygame_event_filter):
         Condition_checker.__init__(self)
-        self._environ_data = environ_data
         self._filter = pygame_event_filter
 
     def confirms(self):
 
-        event = self._environ_data['active_pygame_event']
+        if not environ_data.is_active_pygame_event_set():
+            return False
+
+        event = environ_data.get_active_pygame_event()
         for attr in self._filter:
             filter_val = self._filter[attr]
 

@@ -15,3 +15,9 @@ def update_data(pygame_event):
 
 def get_data():
     return _data
+
+def is_active_pygame_event_set():
+    return _data['active_pygame_event'] is not None
+
+def get_active_pygame_event():
+    return _data['active_pygame_event']

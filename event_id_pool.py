@@ -8,7 +8,7 @@ class Event_id_pool():
         if use_pygame:
             self._generator = Pygame_event_id_generator()
         else:
-            self._generator = Usual_event_id_generator()
+            self._generator = Usual_id_generator()
 
         self._free_ids = []
         self._busy_ids = []
@@ -47,20 +47,20 @@ class Event_id_pool():
         return cls._pygame_pool
 
 
-class Event_id_generator():
+class Id_generator():
 
     def get_id(self):
         assert False, "Method get_id() of class Event_id_generator is abstract and must be overriden!"
 
 
-class Pygame_event_id_generator(Event_id_generator):
+class Pygame_event_id_generator(Id_generator):
     def get_id(self):
         return pygame.event.custom_type()
 
 
-class Usual_event_id_generator(Event_id_generator):
+class Usual_id_generator(Id_generator):
     def __init__(self):
-        Event_id_generator.__init__(self)
+        Id_generator.__init__(self)
         self._last_used_id = -1
 
     def get_id(self):

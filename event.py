@@ -1,4 +1,5 @@
-import event_id_pool, condition_checker
+import event_id_pool, condition_checker, environ_data
+
 
 class Event():
     def __init__(self, typeid, data):
@@ -26,9 +27,8 @@ class EventType(condition_checker.Condition_checker):
 
 
 class ConditionalEventType(EventType):
-    def __init__(self, environ_data, checkers):
+    def __init__(self, checkers):
         EventType.__init__(self)
-        self._environ_data = environ_data
         self._checkers = [*checkers]
 
     def confirms(self):
@@ -43,14 +43,16 @@ class ConditionalEventType(EventType):
 
         event_data = {}
 
-        #collect checkers classes
+        # collect checkers classes
         types = []
         for ch in self._checkers:
             types.append(ch.__class__)
 
-        if condition_checker.Condition_checker_pygame_event in types:
-            #collect pygame event data
-            pygame_event = self._environ_data['active_pygame_event']
+        if condition_checker.Condition_checker_pygame_event in types and \
+                environ_data.is_active_pygame_event_set():
+
+            # collect pygame event data
+            pygame_event = environ_data.get_active_pygame_event()
             pygame_event_data = vars(pygame_event)
             for attr in pygame_event_data:
                 event_data[attr] = pygame_event_data[attr]

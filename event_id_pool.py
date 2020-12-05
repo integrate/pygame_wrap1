@@ -24,7 +24,7 @@ class Event_id_pool():
         return id
 
     def free_id(self, id):
-        self._busy_ids.remove(id)
+        self._busy_ids.remove(id)#TODO найти все remove и добавить проверки на существование
         if id not in self._free_ids:
             self._free_ids.append(id)
 
@@ -54,8 +54,14 @@ class Id_generator():
 
 
 class Pygame_event_id_generator(Id_generator):
+    def __init__(self):
+        Id_generator.__init__(self)
+        self._last_used_id = pygame.USEREVENT
+
     def get_id(self):
-        return pygame.event.custom_type()
+        self._last_used_id += 1
+        assert self._last_used_id<=pygame.NUMEVENTS, "Pygame event id overload!"
+        return self._last_used_id
 
 
 class Usual_id_generator(Id_generator):

@@ -31,6 +31,14 @@ def on_key_down(key, func):
             'key': key
         })
 
+def on_timout(delay, count, func):
+    return _register_event_handler(
+        func=func,
+        delay=delay,
+        count=count
+    )
+
+
 _on_quit_event_id = None
 def on_close_callback(**kwargs):
     exit()

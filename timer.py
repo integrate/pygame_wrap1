@@ -47,6 +47,7 @@ class Timer(cc.Condition_checker):
 
     def get_state(self):
         return self._state
+
     def get_pygame_event_id(self):
         return self._pygame_event_id
 
@@ -60,7 +61,7 @@ class Timer(cc.Condition_checker):
 
     def off(self):
         self._active_is_on = False
-        if self.count!=0 and self._real_count>=self.count:
+        if self.count != 0 and self._real_count >= self.count:
             self.finish()
 
     def confirms(self):

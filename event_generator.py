@@ -1,4 +1,4 @@
-import pygame
+import pygame, gc
 import condition_checker, event_id_pool, environ_data, event, timer
 
 PYGAME_EVENT_TYPES_TO_PROCESS = [
@@ -38,8 +38,13 @@ class Event_generator:
         return t
 
     def _clean_timers(self):
-
-        pass#TODO clean timers
+        # finish and remove timers without refs
+        for tid in self._timers.copy():
+            t = self._timers[tid]
+            rc = len(gc.get_referrers(t))
+            if rc<=2:
+                del self._timers[tid]
+                t.finish()
 
     def start_event_notification(self,
                                  delay=None, count=0,
@@ -66,8 +71,8 @@ class Event_generator:
         return event_type.id
 
     def stop_event_notification(self, event_type_id):
-        if event_type_id in self._event_types:
-            del self._event_types[event_type_id]
+        #remove event types with id
+        self._event_types = {eid:ev for (eid,ev) in self._event_types.items() if eid!=event_type_id}
 
         self._clean_timers()
 

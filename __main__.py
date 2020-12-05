@@ -16,7 +16,7 @@ def on_left_clicked(key, unicode, **kwargs):
     sprite.move_sprite_by(-10, 0)
 
 def on_space_clicked(key, unicode, **kwargs):
-    pass
+    event.stop_listening(sec_id2)
 
 def on_close(**kwargs):
     print("goodbye")
@@ -34,6 +34,7 @@ space_id = event.on_key_down(pygame.K_SPACE, on_space_clicked)
 close_id = event.on_close(on_close)
 sec_id1 = event.on_timout(1000, 0, on_sec1)
 sec_id2 = event.on_timout(1000, 5, on_sec2)
+
 
 app.start()
 

@@ -9,12 +9,10 @@ class Message_broker():
             self._subscribers.append(subscriber)
 
     def ubsubscribe(self, subscriber):
-        self._subscribers.remove(subscriber)
+        self._subscribers =[el for el in self._subscribers if el is not subscriber]
 
     def ubsubscribe_by_event_type_id(self, event_type_id):
-        for sub in self._subscribers.copy():
-            if sub.event_type_id == event_type_id:
-                self._subscribers.remove(sub)
+        self._subscribers =[el for el in self._subscribers if el.event_type_id != event_type_id]
 
     def notify(self, event):
         for sub in self._subscribers:

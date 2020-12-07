@@ -33,3 +33,51 @@ class Condition_checker_pygame_event(Condition_checker):
                 return False
 
         return True
+
+
+class Condition_checker_pressed_keys(Condition_checker):
+    def __init__(self, pressed_keys_list):
+        Condition_checker.__init__(self)
+        self._pressed_keys_filter = pressed_keys_list
+
+    def confirms(self):
+        # get list of pressed keys
+        pressed_keys = environ_data.get_data()['keys_pressed']
+
+        # check allowed keys among pressed
+        keys_len = len(pressed_keys)
+        for f in self._pressed_keys_filter:
+            # check if key exists
+            if f < 0 or f >= keys_len:
+                continue
+            # check if key pressed
+            if pressed_keys[f]: return True
+
+        return False
+
+
+class Condition_checker_pressed_control_keys(Condition_checker):
+    def __init__(self, pressed_keys_list):
+        Condition_checker.__init__(self)
+        self._pressed_keys_filter = pressed_keys_list
+
+    def confirms(self):
+        # get bitmask of pressed control keys
+        pressed_keys_bitmask = environ_data.get_data()['modifier_keys_pressed']
+        for k in self._pressed_keys_filter:
+            if k & pressed_keys_bitmask:
+                return True
+
+        return False
+
+class Condition_checker_mouse_buttons_pressed(Condition_checker):
+    def __init__(self, _pressed_buttons_list):
+        Condition_checker.__init__(self)
+        self._pressed_buttons_filter = _pressed_buttons_list
+
+    def confirms(self):
+        # get list of pressed mouse buttons
+        pressed_buttons = environ_data.get_data()['mouse_buttons_pressed']
+        for k in self._pressed_buttons_filter:
+            if k in pressed_buttons: return True
+        return False

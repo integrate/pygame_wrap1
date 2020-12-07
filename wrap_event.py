@@ -1,12 +1,11 @@
 import wrap_base as wb, pygame
 
 # general subscriber
-def _register_event_handler(func, delay=None, count=None, pygame_event_type_filter_data=None, key_codes=None,
+def _register_event_handler(func, delay=None, count=0, pygame_event_type_filter_data=None, key_codes=None,
                             control_keys=None, mouse_buttons=None):
     # start event notification
     event_type_id = wb.event_generator.start_event_notification(
-        delay=delay,
-        count=count,
+        delay=delay, count=count, force_new=True,
         event_filter=pygame_event_type_filter_data,
         key_codes=key_codes,
         control_keys=control_keys,
@@ -22,6 +21,12 @@ def stop_listening(event_type_id):
     wb.event_generator.stop_event_notification(event_type_id)
     wb.broker.ubsubscribe_by_event_type_id(event_type_id)
 
+def on_timeout(delay, count, func):
+    return _register_event_handler(
+        func=func,
+        delay=delay,
+        count=count
+    )
 
 def on_key_down(key, func):
     return _register_event_handler(
@@ -31,13 +36,39 @@ def on_key_down(key, func):
             'key': key
         })
 
-def on_timout(delay, count, func):
+def on_key_pressed(keys, func, delay=100, control_keys=None):
+    #must be iterable
+    if not hasattr(keys, "__iter__"):
+        keys = [keys]
+
+    # must be iterable
+    if control_keys is not None and \
+            not hasattr(control_keys, "__iter__"):
+        control_keys = [control_keys]
+
     return _register_event_handler(
         func=func,
         delay=delay,
-        count=count
+        key_codes=keys,
+        control_keys=control_keys
     )
 
+def on_mouse_pressed(buttons, func, delay=100, control_keys=None):
+    # must be iterable
+    if not hasattr(buttons, "__iter__"):
+        buttons = [buttons]
+
+    # must be iterable
+    if control_keys is not None and \
+            not hasattr(control_keys, "__iter__"):
+        control_keys = [control_keys]
+
+    return _register_event_handler(
+        func=func,
+        delay=delay,
+        mouse_buttons=buttons,
+        control_keys=control_keys
+    )
 
 _on_quit_event_id = None
 def on_close_callback(**kwargs):

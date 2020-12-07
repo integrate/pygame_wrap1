@@ -1,4 +1,4 @@
-import event_id_pool, condition_checker, environ_data
+import event_id_pool, condition_checker, environ_data, pygame_utils
 
 
 class Event():
@@ -48,13 +48,20 @@ class ConditionalEventType(EventType):
         for ch in self._checkers:
             types.append(ch.__class__)
 
+        # collect pygame event data
         if condition_checker.Condition_checker_pygame_event in types and \
                 environ_data.is_active_pygame_event_set():
 
-            # collect pygame event data
             pygame_event = environ_data.get_active_pygame_event()
             pygame_event_data = vars(pygame_event)
             for attr in pygame_event_data:
                 event_data[attr] = pygame_event_data[attr]
+
+
+        # collect pygame keys pressed data
+        if condition_checker.Condition_checker_pressed_keys in types:
+            event_data['keys'] = pygame_utils.key_list_of_pressed_keys(
+                environ_data.get_data()['keys_pressed']
+            )
 
         return Event(self.id, event_data)

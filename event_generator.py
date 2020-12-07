@@ -9,7 +9,9 @@ PYGAME_EVENT_TYPES_TO_PROCESS = [
 ]
 
 pygame.init()
-pygame.key.set_repeat(50)
+
+
+# pygame.key.set_repeat(50)
 
 
 class Event_generator:
@@ -22,8 +24,8 @@ class Event_generator:
 
         self._timers = {}  # pygame_event_id -> Timer
 
-    def _get_timer(self, delay, count):
-        if count != 0:
+    def _get_timer(self, delay, count, force_new):
+        if force_new or count != 0:
             t = timer.Timer(delay, count, True)
             self._timers[t.get_pygame_event_id()] = t
             return t
@@ -42,12 +44,16 @@ class Event_generator:
         for tid in self._timers.copy():
             t = self._timers[tid]
             rc = len(gc.get_referrers(t))
-            if rc<=2:
+            if rc <= 2:
                 del self._timers[tid]
                 t.finish()
 
+    # delay=None, count=0, force_new=False - создает ограничение по таймеру force_new - создавать новый таймер, иначе пытаться использовать существующий бесконечный с таким же интервалом
+    # event_filter - словарь свойствоСобытияPygame:значение. Если значение этот список, то фильтр пройдет если поле события равно любому элементу из списка.
+    #key_codes - фильтр нажатых клавиш. Фильтр пройдет если любая из переданных клавиш нажата.
+    #control_keys - фильтр нажатых контрольных клавиш. Фильтр пройдет если любая из переданных клавиш нажата.
     def start_event_notification(self,
-                                 delay=None, count=0,
+                                 delay=None, count=0, force_new=False,
                                  event_filter=None, key_codes=None, control_keys=None, mouse_buttons=None
                                  ):
         checkers = []
@@ -59,8 +65,23 @@ class Event_generator:
 
         # create filter by timer
         if delay is not None:
-            t = self._get_timer(delay, count)
+            t = self._get_timer(delay, count, force_new)
             checkers.append(t)
+
+        # create filter by pressed keys
+        if key_codes is not None:
+            chkr = condition_checker.Condition_checker_pressed_keys(key_codes)
+            checkers.append(chkr)
+
+        #create filter by pressed control keys
+        if control_keys is not None:
+            chkr = condition_checker.Condition_checker_pressed_control_keys(control_keys)
+            checkers.append(chkr)
+
+        # create filter by pressed mouse buttons
+        if mouse_buttons is not None:
+            chkr = condition_checker.Condition_checker_mouse_buttons_pressed(mouse_buttons)
+            checkers.append(chkr)
 
         # create and save EventType
         event_type = event.ConditionalEventType(checkers)
@@ -71,8 +92,8 @@ class Event_generator:
         return event_type.id
 
     def stop_event_notification(self, event_type_id):
-        #remove event types with id
-        self._event_types = {eid:ev for (eid,ev) in self._event_types.items() if eid!=event_type_id}
+        # remove event types with id
+        self._event_types = {eid: ev for (eid, ev) in self._event_types.items() if eid != event_type_id}
 
         self._clean_timers()
 
@@ -80,8 +101,10 @@ class Event_generator:
 
         pygame_event_id_pool = event_id_pool.Event_id_pool.get_pygame_pool()
 
-        # process events
-        active_event = None
+        #event types to check
+        _event_types = self._event_types.copy()
+
+        # process pygame events
         pygame_events = pygame.event.get()
         for pev in pygame_events:
             # if type not used
@@ -102,7 +125,6 @@ class Event_generator:
                 self._timers[pev.type].on()
 
             # notify broker
-            _event_types = self._event_types.copy()
             for event_id in _event_types:
                 event_type = _event_types[event_id]
                 if event_type.confirms():
@@ -114,3 +136,11 @@ class Event_generator:
                 self._timers[t].off()
             # turn off pygame event
             environ_data.set_active_pygame_event(None)
+
+
+        # process event not related to pygame events
+        for event_id in _event_types:
+            event_type = _event_types[event_id]
+            if event_type.confirms():
+                event = event_type.make_event()
+                self.message_broker.notify(event)

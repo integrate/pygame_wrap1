@@ -79,5 +79,7 @@ class Condition_checker_mouse_buttons_pressed(Condition_checker):
         # get list of pressed mouse buttons
         pressed_buttons = environ_data.get_data()['mouse_buttons_pressed']
         for k in self._pressed_buttons_filter:
-            if k in pressed_buttons: return True
+            if k<0 or k>=len(pressed_buttons):
+                continue
+            if pressed_buttons[k]: return True
         return False

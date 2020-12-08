@@ -41,7 +41,7 @@ close_id = event.on_close(on_close)
 sec_id1 = event.on_timeout(1000, 0, on_sec1)
 time.sleep(0.5)
 sec_id2 = event.on_timeout(1000, 5, on_sec2)
-mouse_pressed_id = event.on_mouse_pressed(0, on_mouse_pressed)
+mouse_pressed_id = event.on_mouse_pressed(0, on_mouse_pressed, 100, [pygame.KMOD_ALT, pygame.KMOD_SHIFT])
 
 app.start()
 

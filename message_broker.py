@@ -1,3 +1,5 @@
+import inspect
+
 class Message_broker():
     def __init__(self):
         object.__init__(self)
@@ -29,5 +31,19 @@ class Subscriber():
 
     def process_event(self, event):
         assert self.event_type_id == event.type
+
+        #collect data for callback
         event_data = vars(event)
-        self.func(**event_data)
+
+        arglist = inspect.getfullargspec(self.func)
+        arglist = arglist.args
+
+        call_data = {}
+        for arg in arglist:
+            if arg in event_data:
+                call_data[arg] = event_data[arg]
+            else:
+                call_data[arg] = "NOT_DEFINED"
+
+        #callback function
+        self.func(**call_data)

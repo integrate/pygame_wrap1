@@ -9,28 +9,28 @@ world.create_world(1000, 200)
 
 sprite.add_sprite(100, 200, True, 100, 100)
 
-def on_right_clicked(key, unicode, **kwargs):
+def on_right_clicked(key, unicode):
     sprite.move_sprite_by(10, 0)
 
-def on_left_clicked(keys, **kwargs): #TODO данные события при фильтре нажатости клавиш
+def on_left_clicked(keys):
     print(keys)
     sprite.move_sprite_by(-10, 0)
 
-def on_space_clicked(key, unicode, **kwargs):
+def on_space_clicked(key, unicode, dasfg):
     event.stop_listening(sec_id2)
 
-def on_close(**kwargs):
+def on_close():
     print("goodbye")
     event.stop_listening(left_id)
     # exit()
 
-def on_sec1(**kwargs):
+def on_sec1():
     sprite.move_sprite_by(10, 0)
 
-def on_sec2(**kwargs):
+def on_sec2():
     sprite.move_sprite_by(-20, 0)
 
-def on_mouse_pressed(**kwargs):
+def on_mouse_pressed():
     print("mouse 0")
 
 # left_id = event.on_key_down(pygame.K_LEFT, on_left_clicked)

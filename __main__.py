@@ -30,8 +30,8 @@ def on_sec1():
 def on_sec2():
     sprite.move_sprite_by(-20, 0)
 
-def on_mouse_pressed():
-    print("mouse 0")
+def on_mouse_pressed(control_keys, mouse_buttons):
+    print(control_keys, "|", mouse_buttons)
 
 # left_id = event.on_key_down(pygame.K_LEFT, on_left_clicked)
 left_id = event.on_key_pressed([pygame.K_LEFT, pygame.K_RIGHT], on_left_clicked, 100, [pygame.KMOD_LALT, pygame.KMOD_RSHIFT])
@@ -41,7 +41,7 @@ close_id = event.on_close(on_close)
 sec_id1 = event.on_timeout(1000, 0, on_sec1)
 time.sleep(0.5)
 sec_id2 = event.on_timeout(1000, 5, on_sec2)
-mouse_pressed_id = event.on_mouse_pressed(0, on_mouse_pressed, 100, [pygame.KMOD_ALT, pygame.KMOD_SHIFT])
+mouse_pressed_id = event.on_mouse_pressed([0, 1, 2, 3], on_mouse_pressed, 100, [pygame.KMOD_ALT, pygame.KMOD_SHIFT])
 
 app.start()
 

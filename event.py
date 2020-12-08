@@ -64,4 +64,16 @@ class ConditionalEventType(EventType):
                 environ_data.get_data()['keys_pressed']
             )
 
+        #collect pygame control keys pressed data
+        if condition_checker.Condition_checker_pressed_control_keys in types:
+            event_data['control_keys'] = pygame_utils.control_key_list_of_pressed_keys(
+                environ_data.get_data()['modifier_keys_pressed']
+            )
+
+        #collect pygame mouse buttons pressed data
+        if condition_checker.Condition_checker_mouse_buttons_pressed in types:
+            event_data['mouse_buttons'] = pygame_utils.mouse_button_list_of_pressed_buttons(
+                environ_data.get_data()['mouse_buttons_pressed']
+            )
+
         return Event(self.id, event_data)

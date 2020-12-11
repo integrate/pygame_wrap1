@@ -1,3 +1,4 @@
+import pygame
 import event_id_pool, condition_checker, environ_data, pygame_utils
 
 
@@ -75,5 +76,6 @@ class ConditionalEventType(EventType):
             event_data['mouse_buttons'] = pygame_utils.mouse_button_list_of_pressed_buttons(
                 environ_data.get_data()['mouse_buttons_pressed']
             )
+            event_data['pos'] = pygame.mouse.get_pos()
 
         return Event(self.id, event_data)

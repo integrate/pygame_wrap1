@@ -22,15 +22,14 @@ def add_sprite(sprite_type_name, x, y, visible=True):
 
     return id
 
+
 def change_sprite_costume(id, costume_name):
     sprite = _get_sprite_by_id(id)
     sprite.set_costume(costume_name)
 
+
 def get_sprite_costume(id):
     return _get_sprite_by_id(id).get_sprite_costume()
-
-def move_sprite_by(id, dx, dy):
-    _get_sprite_by_id(id).move_sprite_by(dx, dy)
 
 
 def change_sprite_size(id, width, height):
@@ -43,3 +42,41 @@ def get_sprite_width(id):
 
 def get_sprite_height(id):
     return _get_sprite_by_id(id).get_height()
+
+def get_sprite_flipx(id):
+    return _get_sprite_by_id(id).get_flipx()
+
+def get_sprite_flipy(id):
+    return _get_sprite_by_id(id).get_flipy()
+
+def set_sprite_flipx(id, flipx):
+    return _get_sprite_by_id(id).set_flipx(flipx)
+
+def set_sprite_flipy(id, flipy):
+    return _get_sprite_by_id(id).set_flipy(flipy)
+
+def set_sprite_angle(id, angle):
+    _get_sprite_by_id(id).set_angle(angle)
+
+
+def get_sprite_angle(id):
+    return _get_sprite_by_id(id).get_angle()
+
+
+def move_sprite_by(id, dx, dy):
+    _get_sprite_by_id(id).move_sprite_by(dx, dy)
+
+def is_sprite_visible(id):
+    return _get_sprite_by_id(id).get_visible()
+
+def show_sprite(id):
+    _get_sprite_by_id(id).set_visible(True)
+
+def hide_sprite(id):
+    _get_sprite_by_id(id).set_visible(False)
+
+def move_sprite_at_angle(id, angle, distance):
+    _get_sprite_by_id(id).move_sprite_at_angle(angle, distance)
+
+def move_sprite_to_angle(id, distance):
+    _get_sprite_by_id(id).move_sprite_to_angle(distance)

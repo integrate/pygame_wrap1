@@ -1,4 +1,4 @@
-import pygame, math
+import math
 
 def get_point_on_circle(center, start_point, angle_degrees):
     dx = start_point[0] - center[0]
@@ -23,6 +23,10 @@ def get_point_on_circle(center, start_point, angle_degrees):
 
 def get_point_on_circle2(center, start_point, angle_degrees):
 
+    if angle_degrees<0:
+        angle_degrees=angle_degrees%-360
+        angle_degrees+=360
+
     center_m = [*center]
     start_point_m = [*start_point]
 
@@ -32,10 +36,24 @@ def get_point_on_circle2(center, start_point, angle_degrees):
     if center_m[0] > start_point_m[0]:
         xm = -1
         ym = -1
+    if center_m[1]>start_point_m[1]:
+        xm = -1
+        ym = -1
 
     dx, dy = get_point_on_circle(center_m, start_point_m, angle_degrees)
     return dx * xm, dy * ym
 
+
+def get_point_by_angle(start_point, angle, distance):
+    center = [*start_point]
+    start_point[1] -= round(distance) #angle 0
+
+    dx, dy = get_point_on_circle2(center, [*start_point], angle)
+    end_point = [0, 0]
+    end_point[0] = start_point[0] + dx
+    end_point[1] = start_point[1] + dy
+
+    return end_point
 
 # def rot(an):
 #     rt_im = pygame.transform.rotate(orig_im, an)
@@ -57,14 +75,20 @@ def get_point_on_circle2(center, start_point, angle_degrees):
 #     pygame.display.flip()
 
 
-# def make_circle(center, start_point):
-#     pygame.draw.circle(w, [0, 0, 255], center, 4)
-#     pygame.draw.circle(w, [0, 255, 0], start_point, 4)
-#     for i in range(0, 360):
-#         print(i)
-#         dx, dy = get_point_on_circle2(center, start_point, i)
-#         p = [*start_point]
-#         p[0] += round(dx)
-#         p[1] += round(dy)
-#         pygame.draw.circle(w, [255, 0, 0], p, 2)
-#         pygame.display.flip()
+def make_circle(screen, center, start_point, step):
+    import pygame, time, image_modifier
+    pygame.draw.circle(screen, [0, 0, 255], center, 4)
+    pygame.draw.circle(screen, [0, 255, 0], start_point, 4)
+    for i in range(0, 360, step):
+        print(i)
+        # dx, dy = image_modifier.ImageRotator._get_point_on_circle2(center, start_point, i)
+        dx, dy = get_point_on_circle2(center, start_point, i)
+        p = [0, 0]
+        p[0] = start_point[0] + dx
+        p[1] = start_point[1] + dy
+
+        pygame.draw.circle(screen, [255, 0, 0], [round(p[0]), round(p[1])], 2)
+        pygame.display.flip()
+        time.sleep(0.05)
+
+        # start_point=[*p]

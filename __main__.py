@@ -38,18 +38,24 @@ def on_one_clicked(key, unicode, dasfg):
         sprite.change_sprite_costume(sp1_id, "1")
 
 def on_two_clicked():
-    flipx = sprite.get_sprite_flipx(sp1_id)
-    sprite.set_sprite_flipx(sp1_id, not flipx, True)
+    flipx = sprite.get_sprite_flipx_reverse(sp1_id)
+    sprite.set_sprite_flipx_reverse(sp1_id, not flipx)
 
 def on_three_clicked():
-    flipy = sprite.get_sprite_flipy(sp1_id)
-    sprite.set_sprite_flipy(sp1_id, not flipy, True)
+    flipy = sprite.get_sprite_flipy_reverse(sp1_id)
+    sprite.set_sprite_flipy_reverse(sp1_id, not flipy)
 
 def on_four_clicked():
     if not sprite.is_sprite_visible(sp1_id):
         sprite.show_sprite(sp1_id)
     else:
         sprite.hide_sprite(sp1_id)
+
+def on_five_clicked():
+    pass
+
+def on_six_clicked():
+    pass
 
 def on_w_clicked():
     a = sprite.get_sprite_angle(sp1_id)
@@ -88,6 +94,8 @@ one_id = event.on_key_down(pygame.K_1, on_one_clicked)
 two_id = event.on_key_down(pygame.K_2, on_two_clicked)
 three_id = event.on_key_down(pygame.K_3, on_three_clicked)
 four_id = event.on_key_down(pygame.K_4, on_four_clicked)
+five_id = event.on_key_down(pygame.K_5, on_five_clicked)
+six_id = event.on_key_down(pygame.K_6, on_six_clicked)
 w_id = event.on_key_down(pygame.K_w, on_w_clicked)
 s_id = event.on_key_down(pygame.K_s, on_s_clicked)
 d_id = event.on_key_down(pygame.K_d, on_d_clicked)

@@ -164,6 +164,15 @@ class ImageRotator(ImageModifier):
         self._modification_data = angle
         self.update()
 
+    def reflect_flip_once(self, flipx, flipy):
+        res_angle = self._modification_data
+        if flipx:
+            res_angle = -res_angle
+        if flipy:
+            res_angle = -res_angle
+        self._modification_data = res_angle
+        self.update()
+
     def get_angle(self):
         return self._modification_data
 

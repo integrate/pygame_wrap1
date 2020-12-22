@@ -17,6 +17,10 @@ class Sprite_of_type(sprite.Sprite_image):
     def _change_costume(self, image, pos_offset, orig_angle, save_moving_angle):
         if save_moving_angle:
             angle_diff = self.get_start_angle() - orig_angle
+            if self.get_flipx_reverse():
+                angle_diff = -angle_diff
+            if self.get_flipy_reverse():
+                angle_diff = -angle_diff
             angle_modif = self.get_angle_modification()
             self.set_angle_modification(angle_modif+angle_diff)
         self.change_base_image(image, pos_offset, orig_angle)

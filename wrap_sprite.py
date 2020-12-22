@@ -44,28 +44,19 @@ def get_sprite_height(id):
     return _get_sprite_by_id(id).get_height()
 
 
-def get_sprite_flipx(id):
-    return _get_sprite_by_id(id).get_flipx()
-
-
 def get_sprite_flipx_reverse(id):
     return _get_sprite_by_id(id).get_flipx_reverse()
-
-
-def get_sprite_flipy(id):
-    return _get_sprite_by_id(id).get_flipy()
 
 
 def get_sprite_flipy_reverse(id):
     return _get_sprite_by_id(id).get_flipy_reverse()
 
 
-def set_sprite_flipx(id, flipx, reverse_angle_x):
-    return _get_sprite_by_id(id).set_flipx(flipx, reverse_angle_x)
+def set_sprite_flipx_reverse(id, flipx):
+    return _get_sprite_by_id(id).set_flipx_reverse(flipx)
 
-
-def set_sprite_flipy(id, flipy, reverse_angle_y):
-    return _get_sprite_by_id(id).set_flipy(flipy, reverse_angle_y)
+def set_sprite_flipy_reverse(id, flipy):
+    return _get_sprite_by_id(id).set_flipy_reverse(flipy)
 
 
 def set_sprite_angle(id, angle):

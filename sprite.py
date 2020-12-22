@@ -33,10 +33,10 @@ class Sprite_image(pygame.sprite.DirtySprite):
         # original image
         self._orig_modifier = image_modifier.ImageSource(None, None, image, [posx, posy], -base_angle)
         self._size_modifier = image_modifier.ImageResizer(self._orig_modifier, None, None, None)
-        self._rotator = image_modifier.ImageRotator(self._size_modifier, None)
-        self._flipper = image_modifier.ImageFlipper(self._rotator, None)
+        self._flipper_angle = image_modifier.ImageFlipper(self._size_modifier, None)
+        self._rotator = image_modifier.ImageRotator(self._flipper_angle, None)
 
-        self._final_modifier = self._flipper
+        self._final_modifier = self._rotator
         self._final_modifier.change_callback(self._update_sprite_data)
         self._final_modifier.update()
 
@@ -85,23 +85,27 @@ class Sprite_image(pygame.sprite.DirtySprite):
     def get_height(self):
         return self._size_modifier.get_size()[1]
 
-    def get_flipx(self):
-        return self._flipper.get_flipx()
-
     def get_flipx_reverse(self):
-        return self._flipper.get_flipx_reverse()
-
-    def get_flipy(self):
-        return self._flipper.get_flipy()
+        return self._flipper_angle.get_flipx()
 
     def get_flipy_reverse(self):
-        return self._flipper.get_flipy_reverse()
+        return self._flipper_angle.get_flipy()
 
-    def set_flipx(self, flipx, reverse_angle_x):
-        return self._flipper.set_flipx(flipx, reverse_angle_x)
+    def set_flipx_reverse(self, flipx):
+        curr_flip = self._flipper_angle.get_flipx()
 
-    def set_flipy(self, flipy, reverse_angle_y):
-        return self._flipper.set_flipy(flipy, reverse_angle_y)
+        self._flipper_angle.set_flipx(flipx, True)
+
+        if curr_flip != flipx:
+            self._rotator.reflect_flip_once(True, False)
+
+    def set_flipy_reverse(self, flipy):
+        curr_flip_y = self._flipper_angle.get_flipy()
+
+        self._flipper_angle.set_flipy(flipy, True)
+
+        if curr_flip_y != flipy:
+            self._rotator.reflect_flip_once(False, True)
 
     def get_start_angle(self):
         return -self._orig_modifier.get_angle()

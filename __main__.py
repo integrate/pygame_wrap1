@@ -5,12 +5,6 @@ app.set_fps(100)
 
 world.create_world(1000, 1000)
 
-# import math_utils, wrap_base
-# math_utils.make_circle(wrap_base.world._window, [600, 600], [600, 650], 3)
-# math_utils.make_circle(wrap_base.world._window, [600, 600], [600, 550], 3)
-# math_utils.make_circle(wrap_base.world._window, [600, 600], [650, 600], 3)
-# math_utils.make_circle(wrap_base.world._window, [600, 600], [550, 600], 3)
-
 sp1_id = sprite.add_sprite("type1", 600, 600, True)
 w = sprite.get_sprite_width(sp1_id)
 h = sprite.get_sprite_height(sp1_id)
@@ -45,11 +39,11 @@ def on_one_clicked(key, unicode, dasfg):
 
 def on_two_clicked():
     flipx = sprite.get_sprite_flipx(sp1_id)
-    sprite.set_sprite_flipx(sp1_id, not flipx)
+    sprite.set_sprite_flipx(sp1_id, not flipx, True)
 
 def on_three_clicked():
     flipy = sprite.get_sprite_flipy(sp1_id)
-    sprite.set_sprite_flipy(sp1_id, not flipy)
+    sprite.set_sprite_flipy(sp1_id, not flipy, True)
 
 def on_four_clicked():
     if not sprite.is_sprite_visible(sp1_id):

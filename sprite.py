@@ -25,18 +25,18 @@ class Sprite_manager():
 
 
 class Sprite_image(pygame.sprite.DirtySprite):
-    def __init__(self, image, x, y, visible=True, posx=0, posy=0):
+    def __init__(self, image, x, y, visible=True, posx=0, posy=0, base_angle=0):
         pygame.sprite.DirtySprite.__init__(self)
 
         self._pos = [x, y]
 
         # original image
-        self._orig_modifier = image_modifier.ImageSource(None, None, image, [posx, posy])
+        self._orig_modifier = image_modifier.ImageSource(None, None, image, [posx, posy], -base_angle)
         self._size_modifier = image_modifier.ImageResizer(self._orig_modifier, None, None, None)
-        self._flipper = image_modifier.ImageFlipper(self._size_modifier, None)
-        self._rotator = image_modifier.ImageRotator(self._flipper, None)
+        self._rotator = image_modifier.ImageRotator(self._size_modifier, None)
+        self._flipper = image_modifier.ImageFlipper(self._rotator, None)
 
-        self._final_modifier = self._rotator
+        self._final_modifier = self._flipper
         self._final_modifier.change_callback(self._update_sprite_data)
         self._final_modifier.update()
 
@@ -62,6 +62,14 @@ class Sprite_image(pygame.sprite.DirtySprite):
     def change_pos_offset(self, posx, posy):
         self._orig_modifier.change_pos([posx, posy])
 
+    def change_base_angle(self, angle):
+        self._orig_modifier.change_angle(-angle)
+
+    def change_base_image(self, image=None, pos=None, angle=None):
+        if angle is not None:
+            angle = -angle
+        self._orig_modifier.change_all(image, pos, angle)
+
     def change_size(self, width, height):
         self._size_modifier.change_size(width, height)
 
@@ -78,22 +86,34 @@ class Sprite_image(pygame.sprite.DirtySprite):
         return self._size_modifier.get_size()[1]
 
     def get_flipx(self):
-        return self._flipper.get_flips()[0]
+        return self._flipper.get_flipx()
+
+    def get_flipx_reverse(self):
+        return self._flipper.get_flipx_reverse()
 
     def get_flipy(self):
-        return self._flipper.get_flips()[1]
+        return self._flipper.get_flipy()
 
-    def set_flipx(self, flipx):
-        return self._flipper.set_flipx(flipx)
+    def get_flipy_reverse(self):
+        return self._flipper.get_flipy_reverse()
 
-    def set_flipy(self, flipy):
-        return self._flipper.set_flipy(flipy)
+    def set_flipx(self, flipx, reverse_angle_x):
+        return self._flipper.set_flipx(flipx, reverse_angle_x)
 
-    def set_angle(self, angle):
+    def set_flipy(self, flipy, reverse_angle_y):
+        return self._flipper.set_flipy(flipy, reverse_angle_y)
+
+    def get_start_angle(self):
+        return -self._orig_modifier.get_angle()
+
+    def set_angle_modification(self, angle):
         self._rotator.change_angle(-angle)
 
-    def get_angle(self):
+    def get_angle_modification(self):
         return -self._rotator.get_angle()
+
+    def get_final_angle(self):
+        return -self._final_modifier.get_modified_angle()
 
     def move_sprite_by(self, dx, dy):
         self._pos[0] += dx
@@ -115,7 +135,8 @@ class Sprite_image(pygame.sprite.DirtySprite):
         self._update_sprite_data()
 
     def move_sprite_to_angle(self, distance):
-        res = math_utils.get_point_by_angle([*self._pos], self._rotator.get_angle(), distance)
+        an = self._final_modifier.get_modified_angle()
+        res = math_utils.get_point_by_angle([*self._pos], an, distance)
         self._pos[0] = int(res[0])
         self._pos[1] = int(res[1])
 

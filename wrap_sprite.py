@@ -43,40 +43,58 @@ def get_sprite_width(id):
 def get_sprite_height(id):
     return _get_sprite_by_id(id).get_height()
 
+
 def get_sprite_flipx(id):
     return _get_sprite_by_id(id).get_flipx()
+
+
+def get_sprite_flipx_reverse(id):
+    return _get_sprite_by_id(id).get_flipx_reverse()
+
 
 def get_sprite_flipy(id):
     return _get_sprite_by_id(id).get_flipy()
 
-def set_sprite_flipx(id, flipx):
-    return _get_sprite_by_id(id).set_flipx(flipx)
 
-def set_sprite_flipy(id, flipy):
-    return _get_sprite_by_id(id).set_flipy(flipy)
+def get_sprite_flipy_reverse(id):
+    return _get_sprite_by_id(id).get_flipy_reverse()
+
+
+def set_sprite_flipx(id, flipx, reverse_angle_x):
+    return _get_sprite_by_id(id).set_flipx(flipx, reverse_angle_x)
+
+
+def set_sprite_flipy(id, flipy, reverse_angle_y):
+    return _get_sprite_by_id(id).set_flipy(flipy, reverse_angle_y)
+
 
 def set_sprite_angle(id, angle):
-    _get_sprite_by_id(id).set_angle(angle)
+    _get_sprite_by_id(id).set_angle_modification(angle)
 
 
 def get_sprite_angle(id):
-    return _get_sprite_by_id(id).get_angle()
+    return _get_sprite_by_id(id).get_angle_modification()
 
 
 def move_sprite_by(id, dx, dy):
     _get_sprite_by_id(id).move_sprite_by(dx, dy)
 
+
 def is_sprite_visible(id):
     return _get_sprite_by_id(id).get_visible()
+
 
 def show_sprite(id):
     _get_sprite_by_id(id).set_visible(True)
 
+
 def hide_sprite(id):
     _get_sprite_by_id(id).set_visible(False)
 
+
 def move_sprite_at_angle(id, angle, distance):
     _get_sprite_by_id(id).move_sprite_at_angle(angle, distance)
+
 
 def move_sprite_to_angle(id, distance):
     _get_sprite_by_id(id).move_sprite_to_angle(distance)

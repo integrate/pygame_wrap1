@@ -1,6 +1,6 @@
 import math
 
-def get_point_on_circle(center, start_point, angle_degrees):
+def get_point_on_circle_right_bottom(center, start_point, angle_degrees):
     dx = start_point[0] - center[0]
     dy = start_point[1] - center[1]
 
@@ -20,44 +20,113 @@ def get_point_on_circle(center, start_point, angle_degrees):
 
     return [dx, dy]
 
+def get_point_on_circle_right_top(center, start_point, angle_degrees):
+    dx = start_point[0] - center[0]
+    dy = center[1] - start_point[1]
 
-def get_point_on_circle2(center, start_point, angle_degrees):
+    if dy == 0:
+        b_degr = 90
+    else:
+        tanb = dx / dy
+        b_degr = math.degrees(math.atan(tanb))
+
+    c_degr = 90 - b_degr + angle_degrees / 2
+
+    hip = math.hypot(dx, dy)
+    l = 2 * hip * math.sin(math.radians(angle_degrees / 2))
+
+    dx = -l * math.sin(math.radians(c_degr))
+    dy = -l * math.cos(math.radians(c_degr))
+
+    return [dx, dy]
+
+
+def get_point_on_circle_left_top(center, start_point, angle_degrees):
+    dx = center[0] - start_point[0]
+    dy = center[1] - start_point[1]
+
+    if dx == 0:
+        b_degr = 90
+    else:
+        tanb = dy / dx
+        b_degr = math.degrees(math.atan(tanb))
+
+    c_degr = 90 - b_degr + angle_degrees / 2
+
+    hip = math.hypot(dx, dy)
+    l = 2 * hip * math.sin(math.radians(angle_degrees / 2))
+
+    dx = -l * math.cos(math.radians(c_degr))
+    dy = l * math.sin(math.radians(c_degr))
+
+    return [dx, dy]
+
+def get_point_on_circle_left_bottom(center, start_point, angle_degrees):
+    dx = center[0] - start_point[0]
+    dy = start_point[1] - center[1]
+
+    if dy == 0:
+        b_degr = 90
+    else:
+        tanb = dx / dy
+        b_degr = math.degrees(math.atan(tanb))
+
+    c_degr = 90 - b_degr + angle_degrees / 2
+
+    hip = math.hypot(dx, dy)
+    l = 2 * hip * math.sin(math.radians(angle_degrees / 2))
+
+    dx = l * math.sin(math.radians(c_degr))
+    dy = l * math.cos(math.radians(c_degr))
+
+    return [dx, dy]
+
+
+def get_point_on_circle(center, start_point, angle_degrees):
 
     if angle_degrees<0:
         angle_degrees=angle_degrees%-360
         angle_degrees+=360
 
-    center_m = [*center]
-    start_point_m = [*start_point]
 
-    ym = 1
-    xm = 1
+    #right top
+    if center[1] >= start_point[1] and center[0] < start_point[0]:
+        dx, dy = get_point_on_circle_right_top(center, start_point, angle_degrees)
 
-    if center_m[0] > start_point_m[0]:
-        xm = -1
-        ym = -1
-    if center_m[1]>start_point_m[1]:
-        xm = -1
-        ym = -1
+    #right_bottom
+    elif center[1] < start_point[1] and center[0] <= start_point[0]:
+        dx, dy = get_point_on_circle_right_bottom(center, start_point, angle_degrees)
 
-    dx, dy = get_point_on_circle(center_m, start_point_m, angle_degrees)
-    return dx * xm, dy * ym
+    #left top
+    elif center[1] > start_point[1] and center[0] >= start_point[0]:
+        dx, dy = get_point_on_circle_left_top(center, start_point, angle_degrees)
+
+    #left bottom
+    elif center[1] <= start_point[1] and center[0] > start_point[0]:
+        dx, dy = get_point_on_circle_left_bottom(center, start_point, angle_degrees)
+
+    else:
+        dx, dy = 0, 0
+
+    return dx, dy
 
 
 def get_point_by_angle(start_point, angle, distance):
     center = [*start_point]
     start_point[1] -= round(distance) #angle 0
 
-    dx, dy = get_point_on_circle2(center, [*start_point], angle)
+    dx, dy = get_point_on_circle(center, [*start_point], angle)
     end_point = [0, 0]
     end_point[0] = start_point[0] + dx
     end_point[1] = start_point[1] + dy
 
     return end_point
 
-# def rot(an):
+# def rot(an, orig_im, orig_point):
+#     import pygame
 #     rt_im = pygame.transform.rotate(orig_im, an)
 #
+#     orig_center = orig_im.get_rect().center
 #     dx, dy = get_point_on_circle2(orig_center, orig_point, an)
 #
 #     rt_center = [*orig_center]
@@ -79,16 +148,26 @@ def make_circle(screen, center, start_point, step):
     import pygame, time, image_modifier
     pygame.draw.circle(screen, [0, 0, 255], center, 4)
     pygame.draw.circle(screen, [0, 255, 0], start_point, 4)
-    for i in range(0, 360, step):
+    for i in range(0, -360, -1):
         print(i)
         # dx, dy = image_modifier.ImageRotator._get_point_on_circle2(center, start_point, i)
-        dx, dy = get_point_on_circle2(center, start_point, i)
+        dx, dy = get_point_on_circle(center, start_point, i)
         p = [0, 0]
         p[0] = start_point[0] + dx
         p[1] = start_point[1] + dy
 
         pygame.draw.circle(screen, [255, 0, 0], [round(p[0]), round(p[1])], 2)
         pygame.display.flip()
-        time.sleep(0.05)
+        time.sleep(0.01)
 
         # start_point=[*p]
+
+import wrap_base
+# math_utils.make_circle(wrap_base.world._window, [600, 600], [630, 550], -5)#right top
+# math_utils.make_circle(wrap_base.world._window, [600, 600], [630, 650], 3) #right bottom
+# math_utils.make_circle(wrap_base.world._window, [600, 600], [530, 550], 3) #left top
+# math_utils.make_circle(wrap_base.world._window, [600, 600], [530, 650], 3) #left bottom
+# math_utils.make_circle(wrap_base.world._window, [600, 600], [600, 550], -5)#top
+# math_utils.make_circle(wrap_base.world._window, [600, 600], [600, 650], -5)#bottom
+# math_utils.make_circle(wrap_base.world._window, [600, 600], [550, 600], -5)#left
+# math_utils.make_circle(wrap_base.world._window, [600, 600], [650, 600], -5)#right

@@ -80,7 +80,8 @@ def on_sec2():
 
 
 def on_mouse_pressed(pos):
-    print(pos)
+    # sprite.move_sprite_to_point(sp1_id, pos[0], pos[1], 3)
+    sprite.rotate_to_point(sp1_id, pos[0], pos[1])
 
 
 # left_id = event.on_key_down(pygame.K_LEFT, on_left_clicked)

@@ -122,6 +122,71 @@ def get_point_by_angle(start_point, angle, distance):
 
     return end_point
 
+def get_angle_by_point_right_top(center, point):
+    dx = point[0] - center[0]
+    dy = center[1] - point[1]
+
+    if dx == 0:
+        b_degr = 90
+    else:
+        tanb = dy / dx
+        b_degr = math.degrees(math.atan(tanb))
+
+    return b_degr+270
+
+def get_angle_by_point_left_bottom(center, point):
+    dx = center[0] - point[0]
+    dy = point[1] - center[1]
+
+    if dx == 0:
+        b_degr = 90
+    else:
+        tanb = dy / dx
+        b_degr = math.degrees(math.atan(tanb))
+
+    return b_degr+90
+
+def get_angle_by_point_right_bottom(center, point):
+    dx = point[0] - center[0]
+    dy = point[1] - center[1]
+
+    if dy == 0:
+        b_degr = 90
+    else:
+        tanb = dx / dy
+        b_degr = math.degrees(math.atan(tanb))
+
+    return b_degr+180
+
+def get_angle_by_point_left_top(center, point):
+    dx = center[0] - point[0]
+    dy = center[1] - point[1]
+
+    if dy == 0:
+        b_degr = 90
+    else:
+        tanb = dx / dy
+        b_degr = math.degrees(math.atan(tanb))
+
+    return b_degr
+
+def get_angle_by_point(center, point):
+    # right top
+    if center[1] >= point[1] and center[0] < point[0]:
+        return get_angle_by_point_right_top(center, point)
+
+    # right_bottom
+    elif center[1] < point[1] and center[0] <= point[0]:
+        return get_angle_by_point_right_bottom(center, point)
+
+    # left top
+    elif center[1] > point[1] and center[0] >= point[0]:
+        return get_angle_by_point_left_top(center, point)
+
+    # left bottom
+    elif center[1] <= point[1] and center[0] > point[0]:
+        return get_angle_by_point_left_bottom(center, point)
+
 # def rot(an, orig_im, orig_point):
 #     import pygame
 #     rt_im = pygame.transform.rotate(orig_im, an)

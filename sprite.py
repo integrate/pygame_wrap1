@@ -56,6 +56,19 @@ class Sprite_image(pygame.sprite.DirtySprite):
 
         self.dirty = 1
 
+    @staticmethod
+    def normalize_angle(angle):
+        if angle > 360:
+            angle %= 360
+        if angle < -360:
+            angle %= -360
+        if angle > 180:
+            angle -= 360
+        if angle <= -180:
+            angle += 360
+
+        return angle
+
     def change_image(self, image):
         self._orig_modifier.change_image(image)
 
@@ -71,6 +84,14 @@ class Sprite_image(pygame.sprite.DirtySprite):
         self._orig_modifier.change_all(image, pos, angle)
 
     def change_size(self, width, height):
+        self._size_modifier.change_size(width, height)
+
+    def change_width_proportionally(self, width):
+        cur_w, cur_h = self._size_modifier.get_size()
+        if width==0 or cur_w ==0: return
+
+        scale = width/cur_w
+        height = scale*cur_h
         self._size_modifier.change_size(width, height)
 
     def get_real_width(self):
@@ -108,16 +129,16 @@ class Sprite_image(pygame.sprite.DirtySprite):
             self._rotator.reflect_flip_once(False, True)
 
     def get_start_angle(self):
-        return -self._orig_modifier.get_angle()
+        return Sprite_image.normalize_angle(-self._orig_modifier.get_angle())
 
     def set_angle_modification(self, angle):
         self._rotator.change_angle(-angle)
 
     def get_angle_modification(self):
-        return -self._rotator.get_angle()
+        return Sprite_image.normalize_angle(-self._rotator.get_angle())
 
     def get_final_angle(self):
-        return -self._final_modifier.get_modified_angle()
+        return Sprite_image.normalize_angle(-self._final_modifier.get_modified_angle())
 
     def move_sprite_to(self, x, y):
         self._pos[0] = x
@@ -152,7 +173,7 @@ class Sprite_image(pygame.sprite.DirtySprite):
         self._update_sprite_data()
 
     def move_sprite_to_point(self, point, distance):
-        #can't move to same point
+        # can't move to same point
         if point[0] == self._pos[0] and point[1] == self._pos[1]:
             return
 
@@ -172,5 +193,4 @@ class Sprite_image(pygame.sprite.DirtySprite):
         an = math_utils.get_angle_by_point(self._pos, point)
 
         orig_angle = self._flipper_angle.get_modified_angle()
-        self._rotator.change_angle(an-orig_angle)
-
+        self._rotator.change_angle(an - orig_angle)

@@ -72,7 +72,7 @@ def on_a_clicked():
     sprite.move_sprite_to_angle(sp1_id, -10)
 
 def on_sec1():
-    pass
+    print(sprite.get_sprite_final_angle(sp1_id))
 
 
 def on_sec2():
@@ -82,6 +82,7 @@ def on_sec2():
 def on_mouse_pressed(pos):
     # sprite.move_sprite_to_point(sp1_id, pos[0], pos[1], 3)
     sprite.rotate_to_point(sp1_id, pos[0], pos[1])
+    sprite.move_sprite_to_angle(sp1_id, 30)
 
 
 # left_id = event.on_key_down(pygame.K_LEFT, on_left_clicked)
@@ -102,7 +103,7 @@ s_id = event.on_key_down(pygame.K_s, on_s_clicked)
 d_id = event.on_key_down(pygame.K_d, on_d_clicked)
 a_id = event.on_key_down(pygame.K_a, on_a_clicked)
 # close_id = event.on_close(on_close)
-# sec_id1 = event.on_timeout(50, 0, on_sec1)
+sec_id1 = event.on_timeout(50, 0, on_sec1)
 # sec_id2 = event.on_timeout(1000, 5, on_sec2)
 mouse_pressed_id = event.on_mouse_pressed([0], on_mouse_pressed, 100)
 

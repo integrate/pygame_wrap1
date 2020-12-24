@@ -66,6 +66,9 @@ def set_sprite_angle(id, angle):
 def get_sprite_angle(id):
     return _get_sprite_by_id(id).get_angle_modification()
 
+def get_sprite_final_angle(id):
+    return _get_sprite_by_id(id).get_final_angle()
+
 def move_sprite_to(id, x, y):
     return _get_sprite_by_id(id).move_sprite_to(x, y)
 

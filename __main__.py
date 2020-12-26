@@ -2,20 +2,20 @@ import pygame
 from wrap import world, app, event, sprite
 
 
-import sprite_type_loader
-
-
-infos = []
-warnings = []
-path = "sprite_types/type1/"
-res = sprite_type_loader.Sprite_type_loader.load_data(path, None, infos, warnings, "TYPE:")
-
-print(infos)
-print(warnings)
-print(res)
-
-
-exit()
+# import sprite_type_loader
+#
+#
+# infos = []
+# warnings = []
+# path = "sprite_types/type1/"
+# res = sprite_type_loader.Sprite_type_loader.load_data(path, None, infos, warnings, "TYPE:")
+#
+# print(infos)
+# print(warnings)
+# print(res)
+#
+#
+# exit()
 app.set_fps(100)
 
 world.create_world(1000, 1000)

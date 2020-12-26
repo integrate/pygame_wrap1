@@ -1,5 +1,5 @@
-import wrap_base
-import sprite_of_type
+import settings, wrap_base
+import sprite_of_type, sprite_type_factory
 
 
 def _get_sprite_by_id(id):
@@ -9,13 +9,18 @@ def _get_sprite_by_id(id):
     return sprite
 
 
-def add_sprite(sprite_type_name, x, y, visible=True):
+def add_sprite(sprite_type_name, x, y, visible=True, costume=None):
     # get sprite type
+    if not wrap_base.sprite_type_manager.has_sprite_type_name(sprite_type_name):
+        st = sprite_type_factory.Sprite_type_factory.create_sprite_type_from_file(sprite_type_name,
+                                                                                  settings.SPRITE_TYPES_PATH)
+        wrap_base.sprite_type_manager.add_sprite_type(st, sprite_type_name)
+
     sprite_type = wrap_base.sprite_type_manager.get_sprite_type_by_name(sprite_type_name)
     if not sprite_type:
         raise Exception()  # TODO временный код
 
-    sprite = sprite_of_type.Sprite_of_type(sprite_type, x, y, "1", visible)
+    sprite = sprite_of_type.Sprite_of_type(sprite_type, x, y, costume, visible)
 
     id = wrap_base.sprite_id_manager.add_object(sprite)
     wrap_base.world.sprite_manager.add_image_sprite(sprite)
@@ -55,6 +60,7 @@ def get_sprite_flipy_reverse(id):
 def set_sprite_flipx_reverse(id, flipx):
     return _get_sprite_by_id(id).set_flipx_reverse(flipx)
 
+
 def set_sprite_flipy_reverse(id, flipy):
     return _get_sprite_by_id(id).set_flipy_reverse(flipy)
 
@@ -66,11 +72,14 @@ def set_sprite_angle(id, angle):
 def get_sprite_angle(id):
     return _get_sprite_by_id(id).get_angle_modification()
 
+
 def get_sprite_final_angle(id):
     return _get_sprite_by_id(id).get_final_angle()
 
+
 def move_sprite_to(id, x, y):
     return _get_sprite_by_id(id).move_sprite_to(x, y)
+
 
 def move_sprite_by(id, dx, dy):
     _get_sprite_by_id(id).move_sprite_by(dx, dy)
@@ -95,8 +104,10 @@ def move_sprite_at_angle(id, angle, distance):
 def move_sprite_to_angle(id, distance):
     _get_sprite_by_id(id).move_sprite_to_angle(distance)
 
+
 def move_sprite_to_point(id, x, y, distance):
     _get_sprite_by_id(id).move_sprite_to_point([x, y], distance)
+
 
 def rotate_to_point(id, x, y):
     _get_sprite_by_id(id).rotate_to_point([x, y])

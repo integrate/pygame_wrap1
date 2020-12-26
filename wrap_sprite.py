@@ -18,19 +18,29 @@ def add_sprite(sprite_type_name, x, y, visible=True, costume=None):
 
     sprite_type = wrap_base.sprite_type_manager.get_sprite_type_by_name(sprite_type_name)
     if not sprite_type:
-        raise Exception()  # TODO временный код
+        raise Exception(str(sprite_type_name) + " loading failed.")
 
+    #make sprite of sprite type
     sprite = sprite_of_type.Sprite_of_type(sprite_type, x, y, costume, visible)
 
+    #register sprite
     id = wrap_base.sprite_id_manager.add_object(sprite)
     wrap_base.world.sprite_manager.add_image_sprite(sprite)
 
     return id
 
 
-def change_sprite_costume(id, costume_name):
+def change_sprite_costume(id, costume_name, save_moving_angle=False):
     sprite = _get_sprite_by_id(id)
-    sprite.set_costume(costume_name)
+    sprite.set_costume(costume_name, save_moving_angle)
+
+def set_next_costume(id, save_moving_angle=False):
+    sprite = _get_sprite_by_id(id)
+    sprite.set_costume_by_offset(1, save_moving_angle)
+
+def set_previous_costume(id, save_moving_angle=False):
+    sprite = _get_sprite_by_id(id)
+    sprite.set_costume_by_offset(-1, save_moving_angle)
 
 
 def get_sprite_costume(id):

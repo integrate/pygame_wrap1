@@ -2,28 +2,16 @@ import pygame
 from wrap import world, app, event, sprite
 
 
-# import sprite_type_loader
-#
-#
-# infos = []
-# warnings = []
-# path = "sprite_types/type1/"
-# res = sprite_type_loader.Sprite_type_loader.load_data(path, None, infos, warnings, "TYPE:")
-#
-# print(infos)
-# print(warnings)
-# print(res)
-#
-#
-# exit()
+
 app.set_fps(100)
 
 world.create_world(1000, 1000)
+world.set_world_background_color([10, 20, 30])
 
 sp1_id = sprite.add_sprite("type1", 600, 600, True)
 w = sprite.get_sprite_width(sp1_id)
 h = sprite.get_sprite_height(sp1_id)
-sprite.change_sprite_size(sp1_id, w * 0.3, h * 0.3)
+# sprite.change_sprite_size(sp1_id, w * 0.3, h * 0.3)
 
 def on_right_clicked(key, unicode):
     sprite.move_sprite_by(sp1_id, 10, 0)
@@ -47,10 +35,7 @@ def on_space_clicked(key, unicode, dasfg):
     sprite.change_sprite_size(sp1_id, 200, 300)
 
 def on_one_clicked(key, unicode, dasfg):
-    if sprite.get_sprite_costume(sp1_id)=="1":
-        sprite.change_sprite_costume(sp1_id, "2")
-    else:
-        sprite.change_sprite_costume(sp1_id, "1")
+    sprite.set_previous_costume(sp1_id, True)
 
 def on_two_clicked():
     flipx = sprite.get_sprite_flipx_reverse(sp1_id)
@@ -87,7 +72,8 @@ def on_a_clicked():
     sprite.move_sprite_to_angle(sp1_id, -10)
 
 def on_sec1():
-    print(sprite.get_sprite_final_angle(sp1_id))
+    # print(sprite.get_sprite_final_angle(sp1_id))
+    pass
 
 
 def on_sec2():

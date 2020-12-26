@@ -1,18 +1,24 @@
 import sprite
-import pygame
 
 
 class Sprite_of_type(sprite.Sprite_image):
     def __init__(self, sprite_type, x, y, costume_name=None, visible=True):
         self.sprite_type = sprite_type
 
-        #TODO если нет костюма - получить первый костюм типа
+        # if no costume - select first
+        if costume_name is None:
+            costume_name = self.sprite_type.get_costume_names()[0]
+
+        # check costume existence
+        if not self.sprite_type.has_costume_name(costume_name):
+            raise Exception('Costume with name ' + str(costume_name) + " not found.")
+
+        # set initial costume
+        c = self.sprite_type.get_costume_by_name(costume_name)
         self._active_costume_name = costume_name
 
-        # get costume image from sprite type #TODO временный код
-        image = pygame.image.load("sprite_types/type1/costumes/1.png")
-
-        sprite.Sprite_image.__init__(self, image, x, y, visible, 967, 488, 90)
+        pos = c.get_pos()
+        sprite.Sprite_image.__init__(self, c.get_image(), x, y, visible, pos[0], pos[1], c.get_angle())
 
     def _change_costume(self, image, pos_offset, orig_angle, save_moving_angle):
         if save_moving_angle:
@@ -22,17 +28,48 @@ class Sprite_of_type(sprite.Sprite_image):
             if self.get_flipy_reverse():
                 angle_diff = -angle_diff
             angle_modif = self.get_angle_modification()
-            self.set_angle_modification(angle_modif+angle_diff)
+            self.set_angle_modification(angle_modif + angle_diff)
         self.change_base_image(image, pos_offset, orig_angle)
 
-    def set_costume(self, costume_name):
-        # get costume image from sprite type #TODO временный код
-        self._active_costume_name = costume_name
-        image = pygame.image.load("sprite_types/type1/costumes/"+costume_name+".png")
-        if costume_name=="1":
-            self._change_costume(image, [967, 488], 90, True)
+    def _set_costume_by_name(self, name, save_moving_angle):
+        # check costume existence
+        if not self.sprite_type.has_costume_name(name):
+            raise Exception('Costume with name ' + str(name) + " not found.")
+
+        c = self.sprite_type.get_costume_by_name(name)
+        self._active_costume_name = name
+        self._change_costume(c.get_image(), c.get_pos(), c.get_angle(), save_moving_angle)
+
+    def set_costume(self, costume_name, save_moving_angle):
+        self._set_costume_by_name(costume_name, save_moving_angle)
+
+    def set_costume_by_offset(self, offset, save_moving_angle):
+        # no effect if no costumes or no change
+        names = self.sprite_type.get_costume_names()
+        cost_count = len(names)
+        if cost_count == 0 or offset == 0:
+            return
+
+        # correct offset
+        if offset > 0:
+            offset %= cost_count
         else:
-            self._change_costume(image, [115, 66], 0, True)
+            offset %= -cost_count
+
+        # find current index
+        try:
+            ind = names.index(self._active_costume_name)
+            new_index = ind + offset
+        except:
+            new_index = 0
+
+        # make sure new index is in range
+        if new_index < 0:
+            new_index += cost_count
+        elif new_index > cost_count - 1:
+            new_index -= cost_count
+
+        self._set_costume_by_name(names[new_index], save_moving_angle)
 
     def get_sprite_costume(self):
         return self._active_costume_name

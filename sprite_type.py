@@ -3,7 +3,7 @@ class Sprite_types_manager():
         self._sprite_types = {}  # sprite_type_name: sprite_type
 
     def get_sprite_type_names(self):
-        return self._sprite_types.keys()
+        return [*self._sprite_types.keys()]
 
     def has_sprite_type_name(self, name):
         return name in self._sprite_types
@@ -26,7 +26,7 @@ class Sprite_type():
         self._costumes = {}  # name: Sprite_type_costume
 
     def get_costume_names(self):
-        return self._costumes.keys()
+        return [*self._costumes.keys()]
 
     def has_costume_name(self, name):
         return name in self._costumes

@@ -10,7 +10,8 @@ class Sprite_type_factory():
         sprite_type_data = sprite_type_loader.Sprite_type_loader.load_data(path, [], infos, warnings, "SPRITE "+str(name)+":")
 
         if not sprite_type_data:
-            print(warnings)
+            if show_warnings: print(warnings)
+            if show_infos: print(infos)
             return False
 
         #create sprite and costumes
@@ -19,6 +20,9 @@ class Sprite_type_factory():
             pos = [cost_data['posx'], cost_data['posy']]
             cost = sprite_type_costume.Sprite_type_costume_image(cost_data['image'], pos, cost_data['angle'])
 
-            sprite_type.add_costume(cost['name'], cost)
+            sprite_type.add_costume(cost_data['name'], cost)
+
+        if show_warnings: print(warnings)
+        if show_infos: print(infos)
 
         return sprite_type

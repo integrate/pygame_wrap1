@@ -147,3 +147,53 @@ class Sprite_costume_loader():
             res[i] = config_data[i]
 
         return res
+
+
+class Sprite_type_loader():
+    @staticmethod
+    def load_data(path, loading_flags, infos=None, warnings=None, prefix=""):
+        res = {}
+
+        _log_action(infos, warnings, prefix, " loading " + path)
+        costume_path = os.path.join(path, "costumes")
+
+        # check path exists
+        if not os.path.exists(path):
+            _log_action(infos, warnings, prefix, "Type dir not found: "+path, True)
+            return False
+
+        #check path is dir
+        if not os.path.isdir(path):
+            _log_action(infos, warnings, prefix, "Type path must be a dir. Not a file.", True)
+            return False
+
+        # check costume path exists
+        if not os.path.isdir(costume_path):
+            _log_action(infos, warnings, prefix, "Type costumes not found: "+path, True)
+            return False
+
+        res['path'] = path
+        res['costumes_path'] = costume_path
+
+        #extract name
+        path_str = os.fsdecode(path).rstrip("\\/")
+        head, name = os.path.split(path_str)
+        res['name'] = name
+
+        #read costumes
+        cos_data_list = []
+        costumes = os.listdir(costume_path)
+        for cos_file in costumes:
+
+            #ignore ini files
+            head, ext = os.path.splitext(cos_file)
+            if ext==".ini":
+                continue
+
+            cos_path = os.path.join(costume_path, cos_file)
+            cos_data = Sprite_costume_loader.load_data(cos_path, loading_flags, infos, warnings, prefix+" COSTUMES:")
+            if cos_data:
+                cos_data_list.append(cos_data)
+
+        res['costumes'] = cos_data_list
+        return res

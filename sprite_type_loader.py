@@ -64,8 +64,7 @@ class Sprite_costume_loader():
             # if remove_color is True then r, g, b must be defined
             if not cfg.has_option('PROCESS', 'remove_color_r') or \
                 not cfg.has_option('PROCESS', 'remove_color_g') or \
-                not cfg.has_option('PROCESS', 'remove_color_b') or \
-                not cfg.has_option('PROCESS', 'remove_color_thr'):
+                not cfg.has_option('PROCESS', 'remove_color_b'):
 
                 raise BaseException("Remove color parameters not found")
 
@@ -79,7 +78,10 @@ class Sprite_costume_loader():
             if not 0<=b<=255: raise BaseException("Remove color B is invalid:"+str(b))
 
             process['remove_color_rgb'] = [r, g, b]
-            process['remove_color_thr'] = cfg.getint("PROCESS", "remove_color_thr")
+
+            thr = cfg.getint("PROCESS", "remove_color_thr", fallback=1)
+            if not 1 <= thr <= 255: raise BaseException("Color threshold is invalid:" + str(thr))
+            process['remove_color_thr'] = thr
 
 
         except:

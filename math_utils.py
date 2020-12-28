@@ -209,25 +209,25 @@ def get_angle_by_point(center, point):
 #     pygame.display.flip()
 
 
-def make_circle(screen, center, start_point, step):
-    import pygame, time, image_modifier
-    pygame.draw.circle(screen, [0, 0, 255], center, 4)
-    pygame.draw.circle(screen, [0, 255, 0], start_point, 4)
-    for i in range(0, -360, -1):
-        print(i)
-        # dx, dy = image_modifier.ImageRotator._get_point_on_circle2(center, start_point, i)
-        dx, dy = get_point_on_circle(center, start_point, i)
-        p = [0, 0]
-        p[0] = start_point[0] + dx
-        p[1] = start_point[1] + dy
+# def make_circle(screen, center, start_point, step):
+#     import pygame, time, image_modifier
+#     pygame.draw.circle(screen, [0, 0, 255], center, 4)
+#     pygame.draw.circle(screen, [0, 255, 0], start_point, 4)
+#     for i in range(0, -360, -1):
+#         print(i)
+#         # dx, dy = image_modifier.ImageRotator._get_point_on_circle2(center, start_point, i)
+#         dx, dy = get_point_on_circle(center, start_point, i)
+#         p = [0, 0]
+#         p[0] = start_point[0] + dx
+#         p[1] = start_point[1] + dy
+#
+#         pygame.draw.circle(screen, [255, 0, 0], [round(p[0]), round(p[1])], 2)
+#         pygame.display.flip()
+#         time.sleep(0.01)
+#
+#         # start_point=[*p]
 
-        pygame.draw.circle(screen, [255, 0, 0], [round(p[0]), round(p[1])], 2)
-        pygame.display.flip()
-        time.sleep(0.01)
-
-        # start_point=[*p]
-
-import wrap_base
+# import wrap_base
 # math_utils.make_circle(wrap_base.world._window, [600, 600], [630, 550], -5)#right top
 # math_utils.make_circle(wrap_base.world._window, [600, 600], [630, 650], 3) #right bottom
 # math_utils.make_circle(wrap_base.world._window, [600, 600], [530, 550], 3) #left top
@@ -236,3 +236,26 @@ import wrap_base
 # math_utils.make_circle(wrap_base.world._window, [600, 600], [600, 650], -5)#bottom
 # math_utils.make_circle(wrap_base.world._window, [600, 600], [550, 600], -5)#left
 # math_utils.make_circle(wrap_base.world._window, [600, 600], [650, 600], -5)#right
+
+def calc_size_proportionally(size1_mod, size1_orig, size2_orig):
+    #works if both sizes is 0
+    if size1_mod == size1_orig:
+        return size2_orig
+
+    scale = size1_mod/size1_orig
+    return scale*size2_orig
+
+def get_sizes_proportionally(size1_orig, size2_orig, size1_mod, size2_mod):
+    assert size1_mod is not None or size2_mod is not None, "At least one of sizes must be defined"
+
+    #both sized defined
+    if size1_mod is not None and size2_mod is not None:
+        return [int(size1_mod), int(size2_mod)]
+
+    if size1_mod is not None:
+        size2_mod = calc_size_proportionally(size1_mod, size1_orig, size2_orig)
+        return [size1_mod, size2_mod]
+
+    if size2_mod is not None:
+        size1_mod = calc_size_proportionally(size2_mod, size2_orig, size1_orig)
+        return [size1_mod, size2_mod]

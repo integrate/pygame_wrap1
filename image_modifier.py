@@ -1,4 +1,4 @@
-import pygame, math, math_utils
+import pygame, math_utils, image_utils
 
 
 class ImageModifier():
@@ -113,7 +113,7 @@ class ImageResizer(ImageModifier):
         orig_height = orig_image.get_height()
 
         width_to = orig_width if type(modification_data[0]) is not int else modification_data[0]
-        height_to = orig_height if type(modification_data[0]) is not int else modification_data[1]
+        height_to = orig_height if type(modification_data[1]) is not int else modification_data[1]
 
         scale_x = width_to / orig_width
         scale_y = height_to / orig_height
@@ -123,6 +123,10 @@ class ImageResizer(ImageModifier):
         res_pos = [orig_pos[0] * scale_x, orig_pos[1] * scale_y]
 
         return [res_image, res_pos, orig_angle]
+
+    @staticmethod
+    def modify(orig_image, orig_pos, orig_angle, width_to, height_to):
+        return ImageResizer._modify(orig_image, orig_pos, orig_angle, [int(width_to), int(height_to)])
 
     def change_size(self, to_width=None, to_height=None):
         self._modification_data = [to_width, to_height]
@@ -219,7 +223,7 @@ class ImageFlipper(ImageModifier):
         if flipx and reverse_angle_x:
             res_angle = -res_angle
         if flipy and reverse_angle_y:
-            res_angle = 180-res_angle
+            res_angle = 180 - res_angle
 
         return [res_image, res_pos, res_angle]
 
@@ -245,11 +249,55 @@ class ImageFlipper(ImageModifier):
 
     def get_flipx(self):
         return self._modification_data['flipx']
+
     def get_flipx_reverse(self):
         return self._modification_data['reverse_angle_x']
 
     def get_flipy(self):
         return self._modification_data['flipy']
+
     def get_flipy_reverse(self):
         return self._modification_data['reverse_angle_y']
 
+
+class ImageColorRemover(ImageModifier):
+    def __init__(self, image_modifier, callback, remove_color, threshold):
+        ImageModifier.__init__(self, image_modifier, callback)
+
+        # save parameters
+        self._modification_data = {
+            'color': remove_color,
+            'threshold': threshold
+        }
+
+        # first update
+        self.update()
+
+
+    @staticmethod
+    def _modify(orig_image, orig_pos, orig_angle, modification_data):
+        color = modification_data['color']
+        threshold = modification_data['threshold']
+
+        m1 = pygame.mask.from_threshold(orig_image, color, [threshold, threshold, threshold])
+        m1.invert()
+        q2 = orig_image.copy()
+
+        flags = orig_image.get_flags()
+        if flags & pygame.SRCALPHA:
+            transp_color = [0, 0, 0, 0]
+        else:
+            transp_color = image_utils.get_not_used_color(orig_image)
+
+        q2.fill(transp_color)
+        m1.to_surface(q2, orig_image, None, None, None)
+        q2.set_colorkey(transp_color)
+        return [q2, orig_pos, orig_angle]
+
+    @staticmethod
+    def modify(orig_image, orig_pos, orig_angle, color, threshold):
+        mod = {
+            'color':color,
+            'threshold': threshold
+        }
+        return ImageColorRemover._modify(orig_image, orig_pos, orig_angle, mod)

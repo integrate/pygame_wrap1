@@ -8,7 +8,7 @@ app.set_fps(100)
 world.create_world(1000, 1000)
 world.set_world_background_color([10, 20, 30])
 
-sp1_id = sprite.add_sprite("type1", 600, 600, True)
+sp1_id = sprite.add_sprite("type3", 600, 600, True)
 w = sprite.get_sprite_width(sp1_id)
 h = sprite.get_sprite_height(sp1_id)
 # sprite.change_sprite_size(sp1_id, w * 0.3, h * 0.3)

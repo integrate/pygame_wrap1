@@ -8,7 +8,7 @@ app.set_fps(100)
 world.create_world(1000, 1000)
 world.set_world_background_color([10, 20, 30])
 
-sp1_id = sprite.add_sprite("type3", 600, 600, True)
+sp1_id = sprite.add_sprite("type2", 600, 600, True)
 w = sprite.get_sprite_width(sp1_id)
 h = sprite.get_sprite_height(sp1_id)
 # sprite.change_sprite_size(sp1_id, w * 0.3, h * 0.3)
@@ -20,16 +20,28 @@ def on_right_clicked(key, unicode):
 def on_left_clicked(keys):
     sprite.move_sprite_by(sp1_id, -10, 0)
 
-def on_up_clicked():
-    w = sprite.get_sprite_width(sp1_id)
-    h = sprite.get_sprite_height(sp1_id)
-    sprite.change_sprite_size(sp1_id, w*1.1, h*1.1)
 
-def on_down_clicked():
-    w = sprite.get_sprite_width(sp1_id)
-    h = sprite.get_sprite_height(sp1_id)
-    sprite.change_sprite_size(sp1_id, w * 0.9, h * 0.9)
+width = 300
+def on_up_clicked(control_keys):
+    global width
+    width+=10
+    if pygame.KMOD_SHIFT in control_keys:
+        sprite.change_sprite_width(sp1_id, width)
+    else:
+        from_modified = pygame.KMOD_ALT in control_keys
+        sprite.change_width_proportionally(sp1_id, width, from_modified)
 
+def on_down_clicked(control_keys):
+    global width
+    width-=10
+    if pygame.KMOD_SHIFT in control_keys:
+        sprite.change_sprite_width(sp1_id, width)
+    else:
+        from_modified =  pygame.KMOD_ALT in control_keys
+        sprite.change_width_proportionally(sp1_id, width, from_modified)
+
+def on_zero_clicked():
+    sprite.set_sprite_original_size(sp1_id)
 
 def on_space_clicked(key, unicode, dasfg):
     sprite.change_sprite_size(sp1_id, 200, 300)
@@ -93,6 +105,7 @@ left_id = event.on_key_down(pygame.K_LEFT, on_left_clicked)
 up_id = event.on_key_down(pygame.K_UP, on_up_clicked)
 down_id = event.on_key_down(pygame.K_DOWN, on_down_clicked)
 space_id = event.on_key_down(pygame.K_SPACE, on_space_clicked)
+zero_id = event.on_key_down(pygame.K_0, on_zero_clicked)
 one_id = event.on_key_down(pygame.K_1, on_one_clicked)
 two_id = event.on_key_down(pygame.K_2, on_two_clicked)
 three_id = event.on_key_down(pygame.K_3, on_three_clicked)

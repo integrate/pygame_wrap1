@@ -47,9 +47,6 @@ def get_sprite_costume(id):
     return _get_sprite_by_id(id).get_sprite_costume()
 
 
-def change_sprite_size(id, width, height):
-    _get_sprite_by_id(id).change_size(int(width), int(height))
-
 
 def get_sprite_width(id):
     return _get_sprite_by_id(id).get_width()
@@ -57,6 +54,21 @@ def get_sprite_width(id):
 
 def get_sprite_height(id):
     return _get_sprite_by_id(id).get_height()
+
+def change_sprite_size(id, width, height):
+    _get_sprite_by_id(id).change_size_pix(int(width), int(height))
+
+def change_sprite_width(id, width):
+    _get_sprite_by_id(id).change_width(width)
+
+def change_sprite_height(id, height):
+    _get_sprite_by_id(id).change_height(height)
+
+def set_sprite_original_size(id):
+    _get_sprite_by_id(id).set_original_size()
+
+def change_width_proportionally(id, width, from_modified=False):
+    _get_sprite_by_id(id).change_width_proportionally(width, from_modified)
 
 
 def get_sprite_flipx_reverse(id):

@@ -97,23 +97,48 @@ class ImageSource(ImageModifier):
 
 
 class ImageResizer(ImageModifier):
-    def __init__(self, image_modifier, callback, to_width, to_height):
+    def __init__(self, image_modifier, callback, to_width, to_height, size_in_proc=False):
         ImageModifier.__init__(self, image_modifier, callback)
 
         # save parameters
-        self._modification_data = [to_width, to_height]
+        size_pix = [None, None] if size_in_proc else [to_width, to_height]
+        size_proc = [to_width, to_height] if not size_in_proc else [None, None]
+        self._modification_data = {
+            'size_pix': size_pix,
+            'size_proc': size_proc,
+            'priority_pix': not size_in_proc
+        }
 
         # first update
         self.update()
 
     @staticmethod
+    def _get_final_size(modification_data, orig_image_size):
+        if modification_data['priority_pix']:
+            size_pix = modification_data['size_pix']
+            size_x_pix = size_pix[0] if size_pix[0] is not None else orig_image_size[0]
+            size_y_pix = size_pix[1] if size_pix[1] is not None else orig_image_size[1]
+            return [size_x_pix, size_y_pix]
+
+        #procent
+        size_proc = modification_data['size_proc']
+        size_x_proc = size_proc[0] if size_proc[0] is not None else 100
+        size_y_proc = size_proc[1] if size_proc[1] is not None else 100
+
+        size_x_pix = (size_x_proc/100)*orig_image_size[0]
+        size_y_pix = (size_y_proc/100)*orig_image_size[1]
+
+        return [size_x_pix, size_y_pix]
+
+
+    @staticmethod
     def _modify(orig_image, orig_pos, orig_angle, modification_data):
-        # get origin and final size
+        # get original size
         orig_width = orig_image.get_width()
         orig_height = orig_image.get_height()
 
-        width_to = orig_width if type(modification_data[0]) is not int else modification_data[0]
-        height_to = orig_height if type(modification_data[1]) is not int else modification_data[1]
+        # get final size
+        width_to, height_to = ImageResizer._get_final_size(modification_data, orig_image.get_size())
 
         scale_x = width_to / orig_width
         scale_y = height_to / orig_height
@@ -126,10 +151,18 @@ class ImageResizer(ImageModifier):
 
     @staticmethod
     def modify(orig_image, orig_pos, orig_angle, width_to, height_to):
-        return ImageResizer._modify(orig_image, orig_pos, orig_angle, [int(width_to), int(height_to)])
+        mod = {'size_pix': [width_to, height_to],
+               'size_proc': [0, 0],
+               'priority_pix': True
+        }
+        return ImageResizer._modify(orig_image, orig_pos, orig_angle, mod)
 
-    def change_size(self, to_width=None, to_height=None):
-        self._modification_data = [to_width, to_height]
+    def change_size_pix(self, to_width=None, to_height=None):
+        if to_width is not None and to_width < 1:
+            to_width = 1
+        if to_height is not None and to_height < 1:
+            to_height = 1
+        self._modification_data['size_pix'] = [to_width, to_height]
         self.update()
 
     def get_size(self):
@@ -273,9 +306,12 @@ class ImageColorRemover(ImageModifier):
         # first update
         self.update()
 
-
     @staticmethod
     def _modify(orig_image, orig_pos, orig_angle, modification_data):
+        # check if supported
+        if pygame.version.vernum.major < 2:
+            return [orig_image, orig_pos, orig_angle]
+
         color = modification_data['color']
         threshold = modification_data['threshold']
 
@@ -297,7 +333,7 @@ class ImageColorRemover(ImageModifier):
     @staticmethod
     def modify(orig_image, orig_pos, orig_angle, color, threshold):
         mod = {
-            'color':color,
+            'color': color,
             'threshold': threshold
         }
         return ImageColorRemover._modify(orig_image, orig_pos, orig_angle, mod)

@@ -83,16 +83,17 @@ class Sprite_image(pygame.sprite.DirtySprite):
             angle = -angle
         self._orig_modifier.change_all(image, pos, angle)
 
-    def change_size(self, width, height):
-        self._size_modifier.change_size(width, height)
+    def get_original_width(self):
+        oi = self._orig_modifier.get_modified_image()
+        return oi.get_width()
 
-    def change_width_proportionally(self, width):
-        cur_w, cur_h = self._size_modifier.get_size()
-        if width==0 or cur_w ==0: return
+    def get_original_height(self):
+        oi = self._orig_modifier.get_modified_image()
+        return oi.get_height()
 
-        scale = width/cur_w
-        height = scale*cur_h
-        self._size_modifier.change_size(width, height)
+    def get_original_sizes(self):
+        oi = self._orig_modifier.get_modified_image()
+        return oi.get_size()
 
     def get_real_width(self):
         return self.image.get_width()
@@ -100,11 +101,41 @@ class Sprite_image(pygame.sprite.DirtySprite):
     def get_real_height(self):
         return self.image.get_height()
 
+    def get_real_size(self):
+        return self.image.get_size()
+
     def get_width(self):
         return self._size_modifier.get_size()[0]
 
     def get_height(self):
         return self._size_modifier.get_size()[1]
+
+    def get_size(self):
+        return self._size_modifier.get_size()
+
+    def set_original_size(self):
+        self._size_modifier.change_size_pix(None, None)
+
+    def change_width(self, width):
+        h = self._size_modifier.get_size()[1]
+        self._size_modifier.change_size_pix(width, h)
+
+    def change_height(self, height):
+        w = self._size_modifier.get_size()[0]
+        self._size_modifier.change_size_pix(w, height)
+
+    def change_size_pix(self, width, height):
+        self._size_modifier.change_size_pix(width, height)
+
+    def change_width_proportionally(self, width, from_modified=False):
+        if from_modified:
+            cur_w, cur_h = self._size_modifier.get_size()
+        else:
+            oi = self._orig_modifier.get_modified_image()
+            cur_w, cur_h = oi.get_size()
+
+        width, height = math_utils.get_sizes_proportionally(cur_w, cur_h, width, None)
+        self._size_modifier.change_size_pix(width, height)
 
     def get_flipx_reverse(self):
         return self._flipper_angle.get_flipx()

@@ -21,24 +21,40 @@ def on_left_clicked(keys):
     sprite.move_sprite_by(sp1_id, -10, 0)
 
 
-width = 300
+width = 100
+def _show_sprite_size(id):
+    x, y = sprite.get_sprite_size(id)
+    xpr, ypr = sprite.get_sprite_size_proc(id)
+
+    print('width: '+str(x)+" pix / "+str(xpr)+"%")
+    print('height: ' + str(y) + " pix / " + str(ypr) + "%")
+
 def on_up_clicked(control_keys):
     global width
-    width+=10
+    width+=5
     if pygame.KMOD_SHIFT in control_keys:
-        sprite.change_sprite_width(sp1_id, width)
+        sprite.change_sprite_height_proc(sp1_id, width)
     else:
         from_modified = pygame.KMOD_ALT in control_keys
-        sprite.change_width_proportionally(sp1_id, width, from_modified)
+        if from_modified:
+            sprite.change_sprite_size_by_proc(sp1_id, 105)
+        else:
+            sprite.change_sprite_size_proc(sp1_id, width, width)
+    _show_sprite_size(sp1_id)
 
 def on_down_clicked(control_keys):
     global width
-    width-=10
+    width-=5
     if pygame.KMOD_SHIFT in control_keys:
-        sprite.change_sprite_width(sp1_id, width)
+        sprite.change_sprite_height_proc(sp1_id, width)
     else:
         from_modified =  pygame.KMOD_ALT in control_keys
-        sprite.change_width_proportionally(sp1_id, width, from_modified)
+        if from_modified:
+            sprite.change_sprite_size_by_proc(sp1_id, 95)
+        else:
+            sprite.change_sprite_size_proc(sp1_id, width, width)
+
+    _show_sprite_size(sp1_id)
 
 def on_zero_clicked():
     sprite.set_sprite_original_size(sp1_id)
@@ -46,8 +62,10 @@ def on_zero_clicked():
 def on_space_clicked(key, unicode, dasfg):
     sprite.change_sprite_size(sp1_id, 200, 300)
 
-def on_one_clicked(key, unicode, dasfg):
-    sprite.set_previous_costume(sp1_id, True)
+def on_one_clicked(control_keys):
+    apply_proc_size = pygame.KMOD_SHIFT not in control_keys
+    sprite.set_previous_costume(sp1_id, True, apply_proc_size)
+    _show_sprite_size(sp1_id)
 
 def on_two_clicked():
     flipx = sprite.get_sprite_flipx_reverse(sp1_id)

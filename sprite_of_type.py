@@ -20,7 +20,9 @@ class Sprite_of_type(sprite.Sprite_image):
         pos = c.get_pos()
         sprite.Sprite_image.__init__(self, c.get_image(), x, y, visible, pos[0], pos[1], c.get_angle())
 
-    def _change_costume(self, image, pos_offset, orig_angle, save_moving_angle):
+    def _change_costume(self, image, pos_offset, orig_angle, save_moving_angle, apply_proc_size):
+
+        #change angle to guarantee that new costume wil move to same direction as previous
         if save_moving_angle:
             angle_diff = self.get_start_angle() - orig_angle
             if self.get_flipx_reverse():
@@ -29,21 +31,22 @@ class Sprite_of_type(sprite.Sprite_image):
                 angle_diff = -angle_diff
             angle_modif = self.get_angle_modification()
             self.set_angle_modification(angle_modif + angle_diff)
-        self.change_base_image(image, pos_offset, orig_angle)
 
-    def _set_costume_by_name(self, name, save_moving_angle):
+        self.change_base_image(image, pos_offset, orig_angle, apply_proc_size)
+
+    def _set_costume_by_name(self, name, save_moving_angle, apply_proc_size):
         # check costume existence
         if not self.sprite_type.has_costume_name(name):
             raise Exception('Costume with name ' + str(name) + " not found.")
 
         c = self.sprite_type.get_costume_by_name(name)
         self._active_costume_name = name
-        self._change_costume(c.get_image(), c.get_pos(), c.get_angle(), save_moving_angle)
+        self._change_costume(c.get_image(), c.get_pos(), c.get_angle(), save_moving_angle, apply_proc_size)
 
-    def set_costume(self, costume_name, save_moving_angle):
-        self._set_costume_by_name(costume_name, save_moving_angle)
+    def set_costume(self, costume_name, save_moving_angle, apply_proc_size=True):
+        self._set_costume_by_name(costume_name, save_moving_angle, apply_proc_size)
 
-    def set_costume_by_offset(self, offset, save_moving_angle):
+    def set_costume_by_offset(self, offset, save_moving_angle, apply_proc_size=True):
         # no effect if no costumes or no change
         names = self.sprite_type.get_costume_names()
         cost_count = len(names)
@@ -69,7 +72,7 @@ class Sprite_of_type(sprite.Sprite_image):
         elif new_index > cost_count - 1:
             new_index -= cost_count
 
-        self._set_costume_by_name(names[new_index], save_moving_angle)
+        self._set_costume_by_name(names[new_index], save_moving_angle, apply_proc_size)
 
     def get_sprite_costume(self):
         return self._active_costume_name

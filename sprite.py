@@ -69,8 +69,13 @@ class Sprite_image(pygame.sprite.DirtySprite):
 
         return angle
 
-    def change_image(self, image):
+    def change_image(self, image, apply_proc_size=True):
+        if apply_proc_size is not None:
+            self._size_modifier.change_size_priority(not apply_proc_size)
+
         self._orig_modifier.change_image(image)
+
+        self._update_inactive_size_from_reality()
 
     def change_pos_offset(self, posx, posy):
         self._orig_modifier.change_pos([posx, posy])
@@ -78,10 +83,16 @@ class Sprite_image(pygame.sprite.DirtySprite):
     def change_base_angle(self, angle):
         self._orig_modifier.change_angle(-angle)
 
-    def change_base_image(self, image=None, pos=None, angle=None):
+    def change_base_image(self, image=None, pos=None, angle=None, apply_proc_size=True):
         if angle is not None:
             angle = -angle
+
+        if apply_proc_size is not None:
+            self._size_modifier.change_size_priority(not apply_proc_size)
+
         self._orig_modifier.change_all(image, pos, angle)
+
+        self._update_inactive_size_from_reality()
 
     def get_original_width(self):
         oi = self._orig_modifier.get_modified_image()
@@ -91,7 +102,7 @@ class Sprite_image(pygame.sprite.DirtySprite):
         oi = self._orig_modifier.get_modified_image()
         return oi.get_height()
 
-    def get_original_sizes(self):
+    def get_original_size(self):
         oi = self._orig_modifier.get_modified_image()
         return oi.get_size()
 
@@ -104,38 +115,104 @@ class Sprite_image(pygame.sprite.DirtySprite):
     def get_real_size(self):
         return self.image.get_size()
 
-    def get_width(self):
-        return self._size_modifier.get_size()[0]
+    def _update_size_pix_from_reality(self):
+        w_pix, h_pix = self._size_modifier.get_modified_image().get_size()
+        self._size_modifier.change_size_pix(w_pix, h_pix)
 
-    def get_height(self):
-        return self._size_modifier.get_size()[1]
+    def _update_size_proc_from_reality(self):
+        w_pix, h_pix = self._size_modifier.get_modified_image().get_size()
+        w_orig, h_orig = self._orig_modifier.get_modified_image().get_size()
 
-    def get_size(self):
-        return self._size_modifier.get_size()
+        w_proc = 100 * w_pix / w_orig
+        h_proc = 100 * h_pix / h_orig
+        self._size_modifier.change_size_proc(w_proc, h_proc)
+
+    def _set_size_pix(self, width, height):
+        self._size_modifier.change_size_priority(True)
+        self._size_modifier.change_size_pix(width, height)
+        self._update_size_proc_from_reality()
+
+    def _set_size_proc(self, width, height):
+        self._size_modifier.change_size_priority(False)
+        self._size_modifier.change_size_proc(width, height)
+        self._update_size_pix_from_reality()
+
+    def _update_inactive_size_from_reality(self):
+        if self._size_modifier.is_size_priority_pix():
+            self._update_size_proc_from_reality()
+        else:
+            self._update_size_pix_from_reality()
+
+    def get_width_pix(self):
+        return self._size_modifier.get_size_pix()[0]
+
+    def get_height_pix(self):
+        return self._size_modifier.get_size_pix()[1]
+
+    def get_size_pix(self):
+        return self._size_modifier.get_size_pix()
 
     def set_original_size(self):
-        self._size_modifier.change_size_pix(None, None)
+        self._set_size_pix(None, None)
 
-    def change_width(self, width):
-        h = self._size_modifier.get_size()[1]
-        self._size_modifier.change_size_pix(width, h)
+    def change_width_pix(self, width):
+        h = self._size_modifier.get_size_pix()[1]
+        self._set_size_pix(width, h)
 
-    def change_height(self, height):
-        w = self._size_modifier.get_size()[0]
-        self._size_modifier.change_size_pix(w, height)
+    def change_height_pix(self, height):
+        w = self._size_modifier.get_size_pix()[0]
+        self._set_size_pix(w, height)
 
     def change_size_pix(self, width, height):
-        self._size_modifier.change_size_pix(width, height)
+        self._set_size_pix(width, height)
 
-    def change_width_proportionally(self, width, from_modified=False):
+    def change_width_pix_proportionally(self, width, from_modified=False):
         if from_modified:
-            cur_w, cur_h = self._size_modifier.get_size()
+            cur_w, cur_h = self._size_modifier.get_modified_image().get_size()
         else:
             oi = self._orig_modifier.get_modified_image()
             cur_w, cur_h = oi.get_size()
 
         width, height = math_utils.get_sizes_proportionally(cur_w, cur_h, width, None)
-        self._size_modifier.change_size_pix(width, height)
+        self._set_size_pix(width, height)
+
+    def change_height_pix_proportionally(self, height, from_modified=False):
+        if from_modified:
+            cur_w, cur_h = self._size_modifier.get_modified_image().get_size()
+        else:
+            oi = self._orig_modifier.get_modified_image()
+            cur_w, cur_h = oi.get_size()
+
+        width, height = math_utils.get_sizes_proportionally(cur_w, cur_h, None, height)
+        self._set_size_pix(width, height)
+
+    def get_width_proc(self):
+        return self._size_modifier.get_size_proc()[0]
+
+    def get_height_proc(self):
+        return self._size_modifier.get_size_proc()[1]
+
+    def get_size_proc(self):
+        return self._size_modifier.get_size_proc()
+
+    def change_width_proc(self, width):
+        h = self._size_modifier.get_size_proc()[1]
+
+        self._set_size_proc(width, h)
+
+    def change_height_proc(self, height):
+        w = self._size_modifier.get_size_proc()[0]
+        self._set_size_proc(w, height)
+
+    def change_size_proc(self, width, height):
+        self._set_size_proc(width, height)
+
+    def change_size_by_proc(self, proc):
+        orig_w = self._size_modifier.get_size_proc()[0]
+        orig_h = self._size_modifier.get_size_proc()[1]
+        width = proc * orig_w / 100
+        height = proc * orig_h / 100
+        self._set_size_proc(width, height)
 
     def get_flipx_reverse(self):
         return self._flipper_angle.get_flipx()

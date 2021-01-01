@@ -30,17 +30,17 @@ def add_sprite(sprite_type_name, x, y, visible=True, costume=None):
     return id
 
 
-def change_sprite_costume(id, costume_name, save_moving_angle=False):
+def change_sprite_costume(id, costume_name, save_moving_angle=False, apply_proc_size=True):
     sprite = _get_sprite_by_id(id)
-    sprite.set_costume(costume_name, save_moving_angle)
+    sprite.set_costume(costume_name, save_moving_angle, apply_proc_size)
 
-def set_next_costume(id, save_moving_angle=False):
+def set_next_costume(id, save_moving_angle=False, apply_proc_size=True):
     sprite = _get_sprite_by_id(id)
-    sprite.set_costume_by_offset(1, save_moving_angle)
+    sprite.set_costume_by_offset(1, save_moving_angle, apply_proc_size)
 
-def set_previous_costume(id, save_moving_angle=False):
+def set_previous_costume(id, save_moving_angle=False, apply_proc_size=True):
     sprite = _get_sprite_by_id(id)
-    sprite.set_costume_by_offset(-1, save_moving_angle)
+    sprite.set_costume_by_offset(-1, save_moving_angle, apply_proc_size)
 
 
 def get_sprite_costume(id):
@@ -49,27 +49,52 @@ def get_sprite_costume(id):
 
 
 def get_sprite_width(id):
-    return _get_sprite_by_id(id).get_width()
-
+    return _get_sprite_by_id(id).get_width_pix()
 
 def get_sprite_height(id):
-    return _get_sprite_by_id(id).get_height()
+    return _get_sprite_by_id(id).get_height_pix()
+
+def get_sprite_size(id):
+    return _get_sprite_by_id(id).get_size_pix()
+
+def set_sprite_original_size(id):
+    _get_sprite_by_id(id).set_original_size()
 
 def change_sprite_size(id, width, height):
     _get_sprite_by_id(id).change_size_pix(int(width), int(height))
 
 def change_sprite_width(id, width):
-    _get_sprite_by_id(id).change_width(width)
+    _get_sprite_by_id(id).change_width_pix(width)
 
 def change_sprite_height(id, height):
-    _get_sprite_by_id(id).change_height(height)
-
-def set_sprite_original_size(id):
-    _get_sprite_by_id(id).set_original_size()
+    _get_sprite_by_id(id).change_height_pix(height)
 
 def change_width_proportionally(id, width, from_modified=False):
-    _get_sprite_by_id(id).change_width_proportionally(width, from_modified)
+    _get_sprite_by_id(id).change_width_pix_proportionally(width, from_modified)
 
+def change_height_proportionally(id, height, from_modified=False):
+    _get_sprite_by_id(id).change_height_pix_proportionally(height, from_modified)
+
+def get_sprite_width_proc(id):
+    return _get_sprite_by_id(id).get_width_proc()
+
+def get_sprite_height_proc(id):
+    return _get_sprite_by_id(id).get_height_proc()
+
+def get_sprite_size_proc(id):
+    return _get_sprite_by_id(id).get_size_proc()
+
+def change_sprite_size_proc(id, width, height):
+    _get_sprite_by_id(id).change_size_proc(int(width), int(height))
+
+def change_sprite_width_proc(id, width):
+    _get_sprite_by_id(id).change_width_proc(width)
+
+def change_sprite_height_proc(id, height):
+    _get_sprite_by_id(id).change_height_proc(height)
+
+def change_sprite_size_by_proc(id, proc):
+    _get_sprite_by_id(id).change_size_by_proc(proc)
 
 def get_sprite_flipx_reverse(id):
     return _get_sprite_by_id(id).get_flipx_reverse()

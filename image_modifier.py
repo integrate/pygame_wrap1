@@ -143,9 +143,9 @@ class ImageResizer(ImageModifier):
         scale_x = width_to / orig_width
         scale_y = height_to / orig_height
 
-        res_image = pygame.transform.scale(orig_image, [width_to, height_to])
+        res_image = pygame.transform.scale(orig_image, [int(width_to), int(height_to)])
 
-        res_pos = [orig_pos[0] * scale_x, orig_pos[1] * scale_y]
+        res_pos = [int(orig_pos[0] * scale_x), int(orig_pos[1] * scale_y)]
 
         return [res_image, res_pos, orig_angle]
 
@@ -163,10 +163,37 @@ class ImageResizer(ImageModifier):
         if to_height is not None and to_height < 1:
             to_height = 1
         self._modification_data['size_pix'] = [to_width, to_height]
+
+        if self._modification_data['priority_pix']:
+            self.update()
+
+    def get_size_pix(self):
+        return self._modification_data['size_pix']
+
+    def change_size_proc(self, to_width=100, to_height=100):
+        if to_width is None:
+            to_width = 100
+        if to_width is not None and to_width < 0:
+            to_width = 0
+
+        if to_height is None:
+            to_height = 100
+        if to_height is not None and to_height < 0:
+            to_height = 0
+
+        self._modification_data['size_proc'] = [to_width, to_height]
+        if not self._modification_data['priority_pix']:
+            self.update()
+
+    def get_size_proc(self):
+        return self._modification_data['size_proc']
+
+    def change_size_priority(self, priority_pix):
+        self._modification_data['priority_pix'] = bool(priority_pix)
         self.update()
 
-    def get_size(self):
-        return self._changed_image.get_size()
+    def is_size_priority_pix(self):
+        return self._modification_data['priority_pix']
 
 
 class ImageRotator(ImageModifier):

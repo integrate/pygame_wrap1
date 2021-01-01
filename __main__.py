@@ -14,11 +14,12 @@ h = sprite.get_sprite_height(sp1_id)
 # sprite.change_sprite_size(sp1_id, w * 0.3, h * 0.3)
 
 def on_right_clicked(key, unicode):
-    sprite.move_sprite_by(sp1_id, 10, 0)
-
+    sprite.set_bottom_to(sp1_id, 100)
+    print(sprite.get_top(sp1_id))
 
 def on_left_clicked(keys):
-    sprite.move_sprite_by(sp1_id, -10, 0)
+    sprite.set_top_to(sp1_id, 100)
+    print(sprite.get_bottom(sp1_id))
 
 
 width = 100

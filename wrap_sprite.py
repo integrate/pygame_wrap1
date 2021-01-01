@@ -131,6 +131,41 @@ def move_sprite_to(id, x, y):
 def move_sprite_by(id, dx, dy):
     _get_sprite_by_id(id).move_sprite_by(dx, dy)
 
+def get_left(id):
+    return _get_sprite_by_id(id).get_sprite_rect().left
+
+def get_right(id):
+    return _get_sprite_by_id(id).get_sprite_rect().right
+
+def get_top(id):
+    return _get_sprite_by_id(id).get_sprite_rect().top
+
+def get_bottom(id):
+    return _get_sprite_by_id(id).get_sprite_rect().bottom
+
+def get_centerx(id):
+    return _get_sprite_by_id(id).get_sprite_rect().centerx
+
+def get_centery(id):
+    return _get_sprite_by_id(id).get_sprite_rect().centery
+
+def set_left_to(id, left):
+    _get_sprite_by_id(id).set_left_to(left)
+
+def set_right_to(id, right):
+    _get_sprite_by_id(id).set_right_to(right)
+
+def set_top_to(id, top):
+    _get_sprite_by_id(id).set_top_to(top)
+
+def set_bottom_to(id, bottom):
+    _get_sprite_by_id(id).set_bottom_to(bottom)
+
+def set_centerx_to(id, centerx):
+    _get_sprite_by_id(id).set_centerx_to(centerx)
+
+def set_centery_to(id, centery):
+    _get_sprite_by_id(id).set_centery_to(centery)
 
 def is_sprite_visible(id):
     return _get_sprite_by_id(id).get_visible()

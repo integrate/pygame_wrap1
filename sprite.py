@@ -42,6 +42,18 @@ class Sprite_image(pygame.sprite.DirtySprite):
 
         self.visible = visible
 
+    def _update_rect_from_pos(self):
+        # calc correct rect position
+        posx, posy = self._final_modifier.get_modified_pos()
+        self.rect.topleft = [self._pos[0] - posx, self._pos[1] - posy]
+        self.dirty=1
+
+    def _update_pos_from_rect(self):
+        posx, posy = self._final_modifier.get_modified_pos()
+        self._pos[0] = self.rect.x + posx
+        self._pos[1] = self.rect.y + posy
+        self.dirty = 1
+
     def _update_sprite_data(self):
         if not hasattr(self, '_final_modifier'):
             return
@@ -49,12 +61,10 @@ class Sprite_image(pygame.sprite.DirtySprite):
         # get changed image
         self.image = self._final_modifier.get_modified_image()
         self.rect = self.image.get_rect()
-
-        # calc correct pos
-        posx, posy = self._final_modifier.get_modified_pos()
-        self.rect.topleft = [self._pos[0] - posx, self._pos[1] - posy]
-
         self.dirty = 1
+
+        # calc correct rect position
+        self._update_rect_from_pos()
 
     @staticmethod
     def normalize_angle(angle):
@@ -258,6 +268,33 @@ class Sprite_image(pygame.sprite.DirtySprite):
         self._pos[1] += dy
         self._update_sprite_data()
 
+    def get_sprite_rect(self):
+        return pygame.Rect(self.rect)
+
+    def set_left_to(self, left):
+        self.rect.left = left
+        self._update_pos_from_rect()
+
+    def set_right_to(self, right):
+        self.rect.right = right
+        self._update_pos_from_rect()
+
+    def set_top_to(self, top):
+        self.rect.top = top
+        self._update_pos_from_rect()
+
+    def set_bottom_to(self, bottom):
+        self.rect.bottom = bottom
+        self._update_pos_from_rect()
+
+    def set_centerx_to(self, centerx):
+        self.rect.centerx = centerx
+        self._update_pos_from_rect()
+
+    def set_centery_to(self, centery):
+        self.rect.centery = centery
+        self._update_pos_from_rect()
+
     def get_visible(self):
         return self.visible
 
@@ -270,7 +307,7 @@ class Sprite_image(pygame.sprite.DirtySprite):
         self._pos[0] = int(res[0])
         self._pos[1] = int(res[1])
 
-        self._update_sprite_data()
+        self._update_rect_from_pos()
 
     def move_sprite_to_angle(self, distance):
         an = self._final_modifier.get_modified_angle()
@@ -278,7 +315,7 @@ class Sprite_image(pygame.sprite.DirtySprite):
         self._pos[0] = int(res[0])
         self._pos[1] = int(res[1])
 
-        self._update_sprite_data()
+        self._update_rect_from_pos()
 
     def move_sprite_to_point(self, point, distance):
         # can't move to same point
@@ -291,7 +328,7 @@ class Sprite_image(pygame.sprite.DirtySprite):
         self._pos[0] = int(res[0])
         self._pos[1] = int(res[1])
 
-        self._update_sprite_data()
+        self._update_rect_from_pos()
 
     def rotate_to_point(self, point):
         # can't move to same point

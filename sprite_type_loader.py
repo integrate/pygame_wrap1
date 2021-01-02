@@ -32,9 +32,9 @@ class Sprite_costume_loader():
 
         #read base config
         try:
-            data['posx'] = cfg.getint("IMAGE", "posx", fallback=0)
-            data['posy'] = cfg.getint("IMAGE", "posy", fallback=0)
-            data['angle'] = cfg.getint("IMAGE", "angle", fallback=0)
+            data['posx'] = cfg.getint("IMAGE", "posx", fallback=None)
+            data['posy'] = cfg.getint("IMAGE", "posy", fallback=None)
+            data['angle'] = cfg.getint("IMAGE", "angle", fallback=90)
 
         except:
             exc_txt = str(sys.exc_info()[1])
@@ -94,9 +94,9 @@ class Sprite_costume_loader():
 
     @staticmethod
     def default_config(data):
-        data['posx'] = 0
-        data['posy'] = 0
-        data['angle'] = 0
+        data['posx'] = None
+        data['posy'] = None
+        data['angle'] = 90
 
     @staticmethod
     def load_data(path, loading_flags, infos=None, warnings=None, prefix=""):
@@ -118,7 +118,7 @@ class Sprite_costume_loader():
         #load image
         try:
             image = pygame.image.load(path)
-            image.set_alpha(255)
+            # image.set_alpha(255)
         except:
 
             exc_txt = str(sys.exc_info()[1])

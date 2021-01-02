@@ -43,7 +43,9 @@ class Sprite_type_factory():
         sprite_type = st.Sprite_type()
         for cost_data in sprite_type_data['costumes']:
             image = cost_data['image']
-            pos = [cost_data['posx'], cost_data['posy']]
+            posx = cost_data['posx'] if cost_data['posx'] is not None else image.get_width()/2
+            posy = cost_data['posy'] if cost_data['posy'] is not None else image.get_height()/2
+            pos = [posx, posy]
             angle = cost_data['angle']
 
             # prepare image

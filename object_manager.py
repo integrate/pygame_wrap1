@@ -29,3 +29,21 @@ class Object_manager():
             return self._objects[id]
         else:
             return None
+
+    #not existent ids just skipped
+    def get_obj_list_by_id_list(self, id_list):
+        res = []
+        for id in id_list:
+            if id in self._objects.keys():
+                res.append(self._objects[id])
+
+        return res
+
+    #not existent objects just skipped
+    def get_id_list_by_obj_list(self, obj_list):
+        res = []
+        for id, val in self._objects.items():
+            if val in obj_list:
+                res.append(id)
+
+        return res

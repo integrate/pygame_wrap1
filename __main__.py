@@ -8,18 +8,15 @@ app.set_fps(100)
 world.create_world(1000, 1000)
 world.set_world_background_color([10, 20, 30])
 
-sp1_id = sprite.add_sprite("type2", 600, 600, True)
-w = sprite.get_sprite_width(sp1_id)
-h = sprite.get_sprite_height(sp1_id)
-# sprite.change_sprite_size(sp1_id, w * 0.3, h * 0.3)
+sp1_id = sprite.add_sprite("type2", 600, 600, True, "1")
+sp2_id = sprite.add_sprite("type2", 600, 600, True, "man1")
+sp_mark_id = sprite.add_sprite("type3", 500, 500, True)
 
 def on_right_clicked(key, unicode):
     sprite.set_bottom_to(sp1_id, 100)
-    print(sprite.get_top(sp1_id))
 
 def on_left_clicked(keys):
     sprite.set_top_to(sp1_id, 100)
-    print(sprite.get_bottom(sp1_id))
 
 
 width = 100
@@ -29,6 +26,24 @@ def _show_sprite_size(id):
 
     print('width: '+str(x)+" pix / "+str(xpr)+"%")
     print('height: ' + str(y) + " pix / " + str(ypr) + "%")
+
+def _check_collision(id1, id2):
+    res = sprite.sprites_collide(id1, id2)
+    if res:
+        sprite.move_sprite_to(sp_mark_id, res[0], res[1])
+        sprite.show_sprite(sp_mark_id)
+    else:
+        sprite.hide_sprite(sp_mark_id)
+
+
+def _check_collision_any(id1, id_list):
+    res = sprite.sprites_collide_any(id1, id_list)
+    print(res)
+
+def _check_collision_all(id1, id_list):
+    res = sprite.sprites_collide_all(id1, id_list)
+    print(res)
+
 
 def on_up_clicked(control_keys):
     global width
@@ -61,7 +76,10 @@ def on_zero_clicked():
     sprite.set_sprite_original_size(sp1_id)
 
 def on_space_clicked(key, unicode, dasfg):
-    sprite.change_sprite_size(sp1_id, 200, 300)
+    global sp1_id, sp2_id
+    t = sp1_id
+    sp1_id=sp2_id
+    sp2_id=t
 
 def on_one_clicked(control_keys):
     apply_proc_size = pygame.KMOD_SHIFT not in control_keys
@@ -104,7 +122,7 @@ def on_a_clicked():
 
 def on_sec1():
     # print(sprite.get_sprite_final_angle(sp1_id))
-    pass
+    _check_collision_all(sp1_id, [sp2_id, sp_mark_id])
 
 
 def on_sec2():

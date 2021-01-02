@@ -351,10 +351,10 @@ class ImageColorRemover(ImageModifier):
             transp_color = [0, 0, 0, 0]
         else:
             transp_color = image_utils.get_not_used_color(orig_image)
+            q2.set_colorkey(transp_color)
 
         q2.fill(transp_color)
         m1.to_surface(q2, orig_image, None, None, None)
-        q2.set_colorkey(transp_color)
         return [q2, orig_pos, orig_angle]
 
     @staticmethod

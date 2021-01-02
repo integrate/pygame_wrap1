@@ -23,6 +23,32 @@ class Sprite_manager():
     def add_image_sprite(self, sprite):
         self._group.add(sprite)
 
+    def sprites_collide(self, sprite1, sprite2):
+        if not sprite1.rect.colliderect(sprite2.rect):
+            return False
+
+        res = pygame.sprite.collide_mask(sprite1, sprite2)
+        if not res:
+            return False
+
+        res = [*res]
+        res[0] += sprite1.rect.left
+        res[1] += sprite1.rect.top
+        return res
+
+    #returns [index, [x, y]]
+    def sprite_collide_any(self, sprite, sprite_list):
+        gr = pygame.sprite.Group(sprite_list)
+        res = pygame.sprite.spritecollideany(sprite, gr, pygame.sprite.collide_mask)
+
+        return res
+
+    #returns list of collided sprites
+    def sprite_collide_all(self, sprite, sprite_list):
+        gr = pygame.sprite.Group(sprite_list)
+        res = pygame.sprite.spritecollide(sprite, gr, False, pygame.sprite.collide_mask)
+        return res
+
 
 class Sprite_image(pygame.sprite.DirtySprite):
     def __init__(self, image, x, y, visible=True, posx=0, posy=0, base_angle=0):
@@ -62,6 +88,9 @@ class Sprite_image(pygame.sprite.DirtySprite):
         self.image = self._final_modifier.get_modified_image()
         self.rect = self.image.get_rect()
         self.dirty = 1
+
+        #update mask
+        self.mask = pygame.mask.from_surface(self.image, 0)
 
         # calc correct rect position
         self._update_rect_from_pos()

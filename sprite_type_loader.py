@@ -118,6 +118,7 @@ class Sprite_costume_loader():
         #load image
         try:
             image = pygame.image.load(path)
+            image.set_alpha(255)
         except:
 
             exc_txt = str(sys.exc_info()[1])

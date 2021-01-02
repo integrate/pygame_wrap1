@@ -52,8 +52,8 @@ class ImageModifier():
 
 
 class ImageSource(ImageModifier):
-    def __init__(self, image_modifier, callback, image, pos, angle):
-        ImageModifier.__init__(self, image_modifier, callback)
+    def __init__(self, image, pos, angle):
+        ImageModifier.__init__(self, None, None)
 
         # save parameters
         self._modification_data = [image.copy(), [*pos], angle]

@@ -1,6 +1,6 @@
-import settings, wrap_base
-import sprite_of_type, sprite_type_factory
-
+import settings
+import sprite_of_type, sprite_type_factory, sprite_text
+from wrap_sprite_type import *
 
 def _get_sprite_by_id(id):
     sprite = wrap_base.sprite_id_manager.get_obj_by_id(id)
@@ -8,6 +8,11 @@ def _get_sprite_by_id(id):
         raise Exception()  # TODO временный код
     return sprite
 
+
+def _register_sprite(sprite):
+    id = wrap_base.sprite_id_manager.add_object(sprite)
+    wrap_base.world.sprite_manager.add_image_sprite(sprite)
+    return id
 
 def add_sprite(sprite_type_name, x, y, visible=True, costume=None):
     # get sprite type
@@ -23,30 +28,15 @@ def add_sprite(sprite_type_name, x, y, visible=True, costume=None):
     # make sprite of sprite type
     sprite = sprite_of_type.Sprite_of_type(sprite_type, x, y, costume, visible)
 
-    # register sprite
-    id = wrap_base.sprite_id_manager.add_object(sprite)
-    wrap_base.world.sprite_manager.add_image_sprite(sprite)
+    return _register_sprite(sprite)
 
-    return id
+def add_text(x, y, text, visible = True, font_name="Arial", font_size=20,
+                 bold=False, italic=False, underline=False,
+                 text_color=(0, 0, 0),
+                 back_color=None):
+    sprite = sprite_text.Sprite_text(x, y, visible, text, font_name, font_size, bold, italic, underline, text_color, back_color)
+    return _register_sprite(sprite)
 
-
-def change_sprite_costume(id, costume_name, save_moving_angle=False, apply_proc_size=True):
-    sprite = _get_sprite_by_id(id)
-    sprite.set_costume(costume_name, save_moving_angle, apply_proc_size)
-
-
-def set_next_costume(id, save_moving_angle=False, apply_proc_size=True):
-    sprite = _get_sprite_by_id(id)
-    sprite.set_costume_by_offset(1, save_moving_angle, apply_proc_size)
-
-
-def set_previous_costume(id, save_moving_angle=False, apply_proc_size=True):
-    sprite = _get_sprite_by_id(id)
-    sprite.set_costume_by_offset(-1, save_moving_angle, apply_proc_size)
-
-
-def get_sprite_costume(id):
-    return _get_sprite_by_id(id).get_sprite_costume()
 
 
 def get_sprite_width(id):

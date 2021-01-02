@@ -8,8 +8,9 @@ app.set_fps(100)
 world.create_world(1000, 1000)
 world.set_world_background_color([10, 20, 30])
 
-sp1_id = sprite.add_sprite("type2", 600, 600, True, "1")
-sp2_id = sprite.add_sprite("type2", 600, 600, True, "man1")
+#sp1_id = sprite.add_sprite("type2", 600, 600, True, "1")
+sp1_id = sprite.add_text(600, 600, "Ха Ха Ха", text_color=[255, 255, 255])
+sp2_id = sprite.add_sprite("type2", 600, 600, False, "man1")
 sp_mark_id = sprite.add_sprite("type3", 500, 500, True)
 
 def on_right_clicked(key, unicode):

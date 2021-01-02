@@ -57,7 +57,7 @@ class Sprite_image(pygame.sprite.DirtySprite):
         self._pos = [x, y]
 
         # original image
-        self._orig_modifier = image_modifier.ImageSource(None, None, image, [posx, posy], -base_angle)
+        self._orig_modifier = image_modifier.ImageSource(image, [posx, posy], -base_angle)
         self._size_modifier = image_modifier.ImageResizer(self._orig_modifier, None, None, None)
         self._flipper_angle = image_modifier.ImageFlipper(self._size_modifier, None)
         self._rotator = image_modifier.ImageRotator(self._flipper_angle, None)

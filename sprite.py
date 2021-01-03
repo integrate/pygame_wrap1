@@ -23,6 +23,9 @@ class Sprite_manager():
     def add_image_sprite(self, sprite):
         self._group.add(sprite)
 
+    def remove_image_sprite(self, sprite):
+        self._group.remove(sprite)
+
     def sprites_collide(self, sprite1, sprite2):
         if not sprite1.rect.colliderect(sprite2.rect):
             return False

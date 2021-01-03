@@ -10,6 +10,16 @@ def _register_sprite(sprite):
     wrap_base.world.sprite_manager.add_image_sprite(sprite)
     return id
 
+def remove_sprite(id):
+    obj = wrap_base.sprite_id_manager.remove_by_id(id)
+    if obj is not None:
+        wrap_base.world.sprite_manager.remove_image_sprite(obj)
+
+def sprite_exists(id):
+    obj = wrap_base.sprite_id_manager.get_obj_id(id)
+    return obj is not None
+
+
 def add_sprite(sprite_type_name, x, y, visible=True, costume=None):
     # get sprite type
     if not wrap_base.sprite_type_manager.has_sprite_type_name(sprite_type_name):
@@ -32,7 +42,6 @@ def add_text(x, y, text, visible = True, font_name="Arial", font_size=20,
                  back_color=None):
     sprite = sprite_text.Sprite_text(x, y, visible, text, font_name, font_size, bold, italic, underline, text_color, back_color)
     return _register_sprite(sprite)
-
 
 
 def get_sprite_width(id):

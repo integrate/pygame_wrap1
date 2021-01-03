@@ -21,6 +21,13 @@ class Object_manager():
         self._objects[new_id] = obj
         return new_id
 
+    def remove_by_id(self, id):
+        if id in self._objects:
+            obj = self._objects[id]
+            del self._objects[id]
+            return obj
+        return None
+
     def get_obj_id(self, obj):
         return self._get_obj_id(obj)
 

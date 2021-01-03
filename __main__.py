@@ -46,8 +46,9 @@ def _check_collision_any(id1, id_list):
 
 
 def _check_collision_all(id1, id_list):
-    res = sprite.sprites_collide_all(id1, id_list)
-    # print(res)
+    if sprite.sprite_exists(id1):
+        res = sprite.sprites_collide_all(id1, id_list)
+        # print(res)
 
 
 def on_up_clicked(control_keys):
@@ -155,6 +156,8 @@ def on_d_clicked():
 def on_a_clicked():
     sprite.move_sprite_to_angle(sp1_id, -10)
 
+def on_del_clicked():
+    sprite.remove_sprite(sp1_id)
 
 def on_sec1():
     # print(sprite.get_sprite_final_angle(sp1_id))
@@ -189,6 +192,7 @@ w_id = event.on_key_down(pygame.K_w, on_w_clicked)
 s_id = event.on_key_down(pygame.K_s, on_s_clicked)
 d_id = event.on_key_down(pygame.K_d, on_d_clicked)
 a_id = event.on_key_down(pygame.K_a, on_a_clicked)
+del_id = event.on_key_down(pygame.K_DELETE, on_del_clicked)
 # close_id = event.on_close(on_close)
 sec_id1 = event.on_timeout(50, 0, on_sec1)
 # sec_id2 = event.on_timeout(1000, 5, on_sec2)

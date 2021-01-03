@@ -1,12 +1,8 @@
-import settings
+import wrap_base, settings
 import sprite_of_type, sprite_type_factory, sprite_text
+from wrap_sprite_utils import *
 from wrap_sprite_type import *
 
-def _get_sprite_by_id(id):
-    sprite = wrap_base.sprite_id_manager.get_obj_by_id(id)
-    if not sprite:
-        raise Exception()  # TODO временный код
-    return sprite
 
 
 def _register_sprite(sprite):

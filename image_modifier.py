@@ -79,7 +79,7 @@ class ImageSource(ImageModifier):
 
     def change_all(self, image=None, pos=None, angle=None):
         if image is not None:
-            self._modification_data[0] = image.copy()
+            self._modification_data[0] = image.convert_alpha().copy()
 
         if pos is not None:
             self._modification_data[1] = [*pos]

@@ -1,12 +1,21 @@
-import setuptools, glob
+import setuptools, glob, sys
 
-extensions = ("*.py","*.pyx")
-list = []
-for extension in extensions:
-    list.extend(glob.glob("pygame_wrap1/"+extension))
 
-ext = [setuptools.extension.Extension("pygame_wrap1", list)]
 
+# if "develop" in sys.argv:
 setuptools.setup(
-    ext_modules=ext
+    packages=["wrap_engine"]
+    # package_dir={"wrap_engine":"wrap_engine"}
 )
+# else:
+#
+#     extensions = ("*.py", "*.pyx")
+#     list = []
+#     for extension in extensions:
+#         list.extend(glob.glob("wrap_engine/" + extension))
+#
+#     ext = [setuptools.extension.Extension("wrap_engine", list)]
+#
+#     setuptools.setup(
+#         ext_modules=ext
+#     )

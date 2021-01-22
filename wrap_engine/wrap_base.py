@@ -2,7 +2,7 @@ import pygame
 
 pygame.init()
 
-import app, world, event_generator, message_broker, object_manager, sprite_type, sprite_of_type
+from wrap_engine import  app, world, event_generator, message_broker, object_manager, sprite_type, sprite_of_type
 
 world = world.World()
 sprite_id_manager = object_manager.Object_manager()

@@ -1,4 +1,4 @@
-import sprite
+from wrap_engine import sprite
 
 
 class Sprite_of_type(sprite.Sprite_image):

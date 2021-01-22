@@ -1,4 +1,5 @@
-import pygame, image_modifier, math_utils
+import pygame
+from wrap_engine import image_modifier, math_utils
 
 
 class Sprite_manager():

@@ -1,4 +1,4 @@
-import id_generator
+from wrap_engine import id_generator
 
 
 class Object_manager():

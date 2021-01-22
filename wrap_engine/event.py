@@ -1,5 +1,5 @@
 import pygame
-import event_id_pool, condition_checker, environ_data, pygame_utils
+from wrap_engine import event_id_pool, condition_checker, environ_data, pygame_utils
 
 
 class Event():

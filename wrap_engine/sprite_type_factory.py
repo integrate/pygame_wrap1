@@ -1,4 +1,5 @@
-import os, sprite_type_loader, sprite_type as st, sprite_type_costume, math_utils, image_modifier
+import os
+from wrap_engine import sprite_type_loader, sprite_type as st, sprite_type_costume, math_utils, image_modifier
 
 
 class Sprite_type_factory():

@@ -1,4 +1,5 @@
-import pygame, condition_checker as cc, event_id_pool
+import pygame
+from wrap_engine import condition_checker as cc, event_id_pool
 
 TIMER_STATE_PAUSE = 0
 TIMER_STATE_ACTIVE = 1

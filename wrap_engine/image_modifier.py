@@ -1,4 +1,5 @@
-import pygame, math_utils, image_utils
+import pygame
+from wrap_engine import math_utils, image_utils
 
 
 class ImageModifier():

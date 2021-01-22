@@ -1,4 +1,4 @@
-from id_generator import Pygame_event_id_generator, Usual_id_generator
+from wrap_engine.id_generator import Pygame_event_id_generator, Usual_id_generator
 
 
 class Event_id_pool():

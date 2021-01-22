@@ -1,5 +1,5 @@
-from wrap_sprite_utils import *
-from sprite_text import Sprite_text
+from wrap_engine.wrap_sprite_utils import *
+from wrap_engine.sprite_text import Sprite_text
 
 def is_sprite_text(id):
     sprite = _get_sprite_by_id(id)

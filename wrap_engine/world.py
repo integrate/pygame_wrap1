@@ -1,4 +1,5 @@
-import pygame, sprite
+import pygame
+from wrap_engine import sprite
 
 
 class World:

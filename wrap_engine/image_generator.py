@@ -1,4 +1,5 @@
-import image_modifier, pygame
+from wrap_engine import image_modifier
+import pygame
 
 
 class TextImageGenerator(image_modifier.ImageModifier):

@@ -1,4 +1,4 @@
-import wrap_base
+from wrap_engine import  wrap_base
 
 def create_world(width, height):
     wrap_base.world.create_world(width, height)

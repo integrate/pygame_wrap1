@@ -1,5 +1,5 @@
 import pygame, gc
-import condition_checker, event_id_pool, environ_data, event, timer
+from wrap_engine import condition_checker, event_id_pool, environ_data, event, timer
 
 PYGAME_EVENT_TYPES_TO_PROCESS = [
     pygame.KEYDOWN, pygame.KEYUP,

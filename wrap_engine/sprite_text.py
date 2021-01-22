@@ -1,4 +1,5 @@
-import pygame, sprite, image_generator
+import pygame
+from wrap_engine import sprite, image_generator
 
 
 class Sprite_text(sprite.Sprite_image, image_generator.TextImageGenerator):

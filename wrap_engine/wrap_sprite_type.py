@@ -1,4 +1,4 @@
-from wrap_sprite_utils import *
+from wrap_engine.wrap_sprite_utils import *
 
 def change_sprite_costume(id, costume_name, save_moving_angle=False, apply_proc_size=True):
     sprite = _get_sprite_by_id(id)

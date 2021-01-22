@@ -1,4 +1,4 @@
-import wrap_base
+from wrap_engine import wrap_base
 
 __all__=["_get_sprite_by_id"]
 

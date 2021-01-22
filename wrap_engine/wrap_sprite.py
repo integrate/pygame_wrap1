@@ -1,7 +1,7 @@
-import wrap_base, settings
-import sprite_of_type, sprite_type_factory, sprite_text
-from wrap_sprite_utils import *
-from wrap_sprite_type import *
+from wrap_engine import  wrap_base, settings
+from wrap_engine import  sprite_of_type, sprite_type_factory, sprite_text
+from wrap_engine.wrap_sprite_utils import *
+from wrap_engine.wrap_sprite_type import *
 
 
 

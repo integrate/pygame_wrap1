@@ -1,1 +1,0 @@
-SPRITE_TYPES_PATH="sprite_types"

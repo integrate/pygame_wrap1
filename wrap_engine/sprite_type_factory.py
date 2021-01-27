@@ -5,7 +5,7 @@ from wrap_engine import sprite_type_loader, sprite_type as st, sprite_type_costu
 class Sprite_type_factory():
     @staticmethod
     def _prepare_image(orig_image, orig_pos, orig_angle, prepare_data):
-        print(prepare_data)
+        # print(prepare_data)
 
         # change size
         if ('width' in prepare_data and prepare_data['width'] is not None) or\

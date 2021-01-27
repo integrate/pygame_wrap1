@@ -7,7 +7,8 @@ if period.days<0:
     print("Library expired!")
     exit()
 
+import os
+os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = '1'
+import pygame
+from wrap_engine import app, world, event_generator, message_broker, object_manager, sprite_type, sprite_of_type
 
-from wrap_engine import wrap_world as world, wrap_app as app, wrap_event as event
-from wrap_engine import wrap_sprite as sprite
-from wrap_engine import wrap_sprite_text as text_sprite

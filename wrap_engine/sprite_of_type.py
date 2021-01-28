@@ -1,4 +1,6 @@
 from wrap_engine import sprite
+from wrap_engine.transl import translator as _
+from wrap_engine import exception as exc
 
 
 class Sprite_of_type(sprite.Sprite_image):
@@ -37,7 +39,8 @@ class Sprite_of_type(sprite.Sprite_image):
     def _set_costume_by_name(self, name, save_moving_angle, apply_proc_size):
         # check costume existence
         if not self.sprite_type.has_costume_name(name):
-            raise Exception('Costume with name ' + str(name) + " not found.")
+            err = _("Costume with name {costume_name} not found.")
+            raise exc.WrapEngineExceprion(err.format(costume_name=name))
 
         c = self.sprite_type.get_costume_by_name(name)
         self._active_costume_name = name

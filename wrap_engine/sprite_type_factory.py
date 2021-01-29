@@ -36,8 +36,12 @@ class Sprite_type_factory():
                                                                            "SPRITE " + str(name) + ":")
 
         if not sprite_type_data:
-            if show_warnings: print(warnings)
-            if show_infos: print(infos)
+            if show_warnings:
+                for i in warnings:
+                    print(i)
+            if show_infos:
+                for i in infos:
+                    print(i)
             return False
 
         # create sprite and costumes
@@ -56,7 +60,11 @@ class Sprite_type_factory():
             cost = sprite_type_costume.Sprite_type_costume_image(image, pos, angle)
             sprite_type.add_costume(cost_data['name'], cost)
 
-        if show_warnings: print(warnings)
-        if show_infos: print(infos)
+        if show_warnings:
+            for i in warnings:
+                print(i)
+        if show_infos:
+            for i in infos:
+                print(i)
 
         return sprite_type

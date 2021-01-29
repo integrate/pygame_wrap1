@@ -1,8 +1,5 @@
 import sys, os, pygame, configparser
-# class Sprite_data_loader():
-#     @staticmethod
-#     def check_data(file, loading_flags, infos, warnings)
-#         assert False, "Method is abstract and must be"
+from wrap_engine.transl import translator as _
 
 def _log_action(info, warnings, prefix, text, do_warning=False):
     text = prefix+" "+text
@@ -16,7 +13,7 @@ class Sprite_costume_loader():
     def load_config(cfg_path, loading_flags, data, infos, warnings, prefix):
         #check existance
         if not os.path.isfile(cfg_path):
-            _log_action(infos, warnings, prefix, "No costume config found.")
+            _log_action(infos, warnings, prefix, _("No costume config found."))
             return False
 
         # try to load
@@ -25,10 +22,10 @@ class Sprite_costume_loader():
             cfg.read(cfg_path)
         except:
             exc_txt = str(sys.exc_info()[1])
-            _log_action(infos, warnings, prefix, "Config loading error: " + exc_txt, True)
+            _log_action(infos, warnings, prefix, _("Config loading error")+": " + exc_txt, True)
             return False
 
-        _log_action(infos, warnings, prefix, "Costume config found.")
+        _log_action(infos, warnings, prefix, _("Costume config found."))
 
         #read base config
         try:
@@ -38,7 +35,7 @@ class Sprite_costume_loader():
 
         except:
             exc_txt = str(sys.exc_info()[1])
-            _log_action(infos, warnings, prefix, "Config reading error: " + exc_txt, True)
+            _log_action(infos, warnings, prefix, _("Config reading error")+": " + exc_txt, True)
             return False
 
         # read optional 'process' part
@@ -53,7 +50,7 @@ class Sprite_costume_loader():
             process['remove_color'] = cfg.getboolean("PROCESS", "remove_color", fallback=False)
         except:
             exc_txt = str(sys.exc_info()[1])
-            _log_action(infos, warnings, prefix, "Config reading error: " + exc_txt, True)
+            _log_action(infos, warnings, prefix, _("Config reading error")+": " + exc_txt, True)
             return False
 
         # read optional remove color details
@@ -66,27 +63,27 @@ class Sprite_costume_loader():
                 not cfg.has_option('PROCESS', 'remove_color_g') or \
                 not cfg.has_option('PROCESS', 'remove_color_b'):
 
-                raise BaseException("Remove color parameters not found")
+                raise BaseException(_("Remove color parameters not found"))
 
             r = cfg.getint("PROCESS", "remove_color_r")
-            if not 0<=r<=255: raise BaseException("Remove color R is invalid:"+str(r))
+            if not 0<=r<=255: raise BaseException(_("Remove color R is invalid")+":"+str(r))
 
             g = cfg.getint("PROCESS", "remove_color_g")
-            if not 0<=g<=255: raise BaseException("Remove color G is invalid:"+str(g))
+            if not 0<=g<=255: raise BaseException(_("Remove color G is invalid")+":"+str(g))
 
             b = cfg.getint("PROCESS", "remove_color_b")
-            if not 0<=b<=255: raise BaseException("Remove color B is invalid:"+str(b))
+            if not 0<=b<=255: raise BaseException(_("Remove color B is invalid")+":"+str(b))
 
             process['remove_color_rgb'] = [r, g, b]
 
             thr = cfg.getint("PROCESS", "remove_color_thr", fallback=1)
-            if not 1 <= thr <= 255: raise BaseException("Color threshold is invalid:" + str(thr))
+            if not 1 <= thr <= 255: raise BaseException(_("Color threshold is invalid") +":" + str(thr))
             process['remove_color_thr'] = thr
 
 
         except:
             exc_txt = str(sys.exc_info()[1])
-            _log_action(infos, warnings, prefix, "Config reading error: " + exc_txt, True)
+            _log_action(infos, warnings, prefix, _("Config reading error")+": " + exc_txt, True)
             return False
 
         return True
@@ -103,16 +100,16 @@ class Sprite_costume_loader():
 
         res = {}
 
-        _log_action(infos, warnings, prefix, " loading " + path)
+        _log_action(infos, warnings, prefix, _("loading")+" " + path)
 
         # check path exists
         if not os.path.exists(path):
-            _log_action(infos, warnings, prefix, "Costume image file not found: "+path, True)
+            _log_action(infos, warnings, prefix, _("Costume image file not found")+": "+path, True)
             return False
 
         #check path is file
         if not os.path.isfile(path):
-            _log_action(infos, warnings, prefix, "Costume image must be a file. Not a directory.", True)
+            _log_action(infos, warnings, prefix, _("Costume image must be a file. Not a directory."), True)
             return False
 
         #load image
@@ -157,22 +154,22 @@ class Sprite_type_loader():
     def load_data(path, loading_flags, infos=None, warnings=None, prefix=""):
         res = {}
 
-        _log_action(infos, warnings, prefix, " loading " + path)
+        _log_action(infos, warnings, prefix, _("loading")+" " + path)
         costume_path = os.path.join(path, "costumes")
 
         # check path exists
         if not os.path.exists(path):
-            _log_action(infos, warnings, prefix, "Type dir not found: "+path, True)
+            _log_action(infos, warnings, prefix, _("Type dir not found")+": "+path, True)
             return False
 
         #check path is dir
         if not os.path.isdir(path):
-            _log_action(infos, warnings, prefix, "Type path must be a dir. Not a file.", True)
+            _log_action(infos, warnings, prefix, _("Type path must be a dir. Not a file."), True)
             return False
 
         # check costume path exists
         if not os.path.isdir(costume_path):
-            _log_action(infos, warnings, prefix, "Type costumes not found: "+path, True)
+            _log_action(infos, warnings, prefix, _("Type costumes not found")+": "+path, True)
             return False
 
         res['path'] = path

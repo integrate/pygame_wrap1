@@ -13,7 +13,8 @@ class Sprite_of_type(sprite.Sprite_image):
 
         # check costume existence
         if not self.sprite_type.has_costume_name(costume_name):
-            raise Exception('Costume with name ' + str(costume_name) + " not found.")
+            err = _("Costume with name {costume_name} not found").format(costume_name=str(costume_name))
+            raise Exception(err)
 
         # set initial costume
         c = self.sprite_type.get_costume_by_name(costume_name)
@@ -39,7 +40,7 @@ class Sprite_of_type(sprite.Sprite_image):
     def _set_costume_by_name(self, name, save_moving_angle, apply_proc_size):
         # check costume existence
         if not self.sprite_type.has_costume_name(name):
-            err = _("Costume with name {costume_name} not found.")
+            err = _("Costume with name {costume_name} not found")
             raise exc.WrapEngineExceprion(err.format(costume_name=name))
 
         c = self.sprite_type.get_costume_by_name(name)

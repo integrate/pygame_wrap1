@@ -17,6 +17,7 @@ class Sprite_manager():
 
         self._bkg = bkg
         self._group.clear(None, self._bkg)
+        self._group.repaint_rect(self._window.get_rect())
 
     def update_sprites(self):
         self._group.draw(self._window)

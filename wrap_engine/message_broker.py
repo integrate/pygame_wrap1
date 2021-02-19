@@ -23,12 +23,15 @@ class Message_broker():
 
 
 class Subscriber():
-    def __init__(self, event_type_id, func):
+    def __init__(self, event_type_id, func, orig_func = None):
         object.__init__(self)
 
         self.event_type_id = event_type_id
         self.func = func
-        self.func_arglist = [*inspect.getfullargspec(self.func).args]
+        if orig_func is not None:
+            self.func_arglist = [*inspect.getfullargspec(orig_func).args]
+        else:
+            self.func_arglist = [*inspect.getfullargspec(func).args]
 
     def process_event(self, event):
         assert self.event_type_id == event.type

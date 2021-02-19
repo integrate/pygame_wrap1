@@ -67,7 +67,7 @@ class World:
         return bool(self._window.get_flags() & pygame.FULLSCREEN)
 
     def set_world_background_color(self, color):
-        self._bkg_color = color
+        self._bkg_color = [*color]
         self._update_bkg()
         self._update_sprite_manager()
 

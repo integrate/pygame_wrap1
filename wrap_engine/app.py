@@ -12,17 +12,7 @@ class App:
         self.world = world
         self.event_generator = event_generator
 
-        self._lock = threading.Lock()
-        self._rpyc_connections = []
-
-    def add_connection(self, conn):
-        with self._lock:
-            self._rpyc_connections.append(conn)
-
-    def remove_connection(self, conn):
-        with self._lock:
-            if conn in self._rpyc_connections:
-                self._rpyc_connections.remove(conn)
+        self._started = False
 
     def get_fps(self):
         return self.fps
@@ -39,24 +29,41 @@ class App:
         if self.world._is_world_created():
             self.world.update()
 
-    def _serve_connections(self, timeout_to_all_connections):
-        if len(self._rpyc_connections)==0:
+    def start(self, on_tick = None):
+        if self._started:
             return
 
-        one_timeout = timeout_to_all_connections/len(self._rpyc_connections)
-        for i in self._rpyc_connections.copy():
-            if i.closed:
-                continue
-            i.poll_all(one_timeout)
+        self._started = True
 
-    def start(self):
         while True:
             self._clock.tick(self.fps)
             self._do_cycle()
-        
-    def start_as_server(self):
-        while True:
-            with self._lock:
-                self._serve_connections(1/self.fps)
-                self._clock.tick(self.fps)
-                self._do_cycle()
+            if on_tick is not None:
+                on_tick()
+
+    # def _serve_connections(self, timeout_to_all_connections):
+    #     if len(self._rpyc_connections)==0:
+    #         return
+    #
+    #     one_timeout = timeout_to_all_connections/len(self._rpyc_connections)
+    #     for i in self._rpyc_connections.copy():
+    #         if i.closed:
+    #             continue
+    #         i.poll_all(one_timeout)
+
+    # def start_as_server(self):
+    #     while True:
+    #         with self._lock:
+    #             self._serve_connections(1/self.fps)
+    #             self._clock.tick(self.fps)
+    #             self._do_cycle()
+    #
+    # def start_with_connection(self, connection):
+    #     while True:
+    #         if not connection.closed:
+    #             connection.poll_all(1/self.fps)
+    #         else:
+    #             break
+    #
+    #         self._clock.tick(self.fps)
+    #         self._do_cycle()

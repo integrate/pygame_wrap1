@@ -60,6 +60,7 @@ class Event_generator:
 
         # create filter by pygame event
         if event_filter is not None:
+            event_filter = {**event_filter}
             chkr = condition_checker.Condition_checker_pygame_event(event_filter)
             checkers.append(chkr)
 
@@ -70,16 +71,19 @@ class Event_generator:
 
         # create filter by pressed keys
         if key_codes is not None:
+            key_codes = [*key_codes]
             chkr = condition_checker.Condition_checker_pressed_keys(key_codes)
             checkers.append(chkr)
 
         #create filter by pressed control keys
         if control_keys is not None:
+            control_keys = [*control_keys]
             chkr = condition_checker.Condition_checker_pressed_control_keys(control_keys)
             checkers.append(chkr)
 
         # create filter by pressed mouse buttons
         if mouse_buttons is not None:
+            mouse_buttons = [*mouse_buttons]
             chkr = condition_checker.Condition_checker_mouse_buttons_pressed(mouse_buttons)
             checkers.append(chkr)
 

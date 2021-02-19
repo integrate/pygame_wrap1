@@ -28,6 +28,7 @@ class Subscriber():
 
         self.event_type_id = event_type_id
         self.func = func
+        self.func_arglist = [*inspect.getfullargspec(self.func).args]
 
     def process_event(self, event):
         assert self.event_type_id == event.type
@@ -35,11 +36,8 @@ class Subscriber():
         #collect data for callback
         event_data = vars(event)
 
-        arglist = inspect.getfullargspec(self.func)
-        arglist = arglist.args
-
         call_data = {}
-        for arg in arglist:
+        for arg in self.func_arglist:
             if arg in event_data:
                 call_data[arg] = event_data[arg]
             else:

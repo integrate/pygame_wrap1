@@ -8,6 +8,18 @@ class Condition_checker():
 
 
 class Condition_checker_pygame_event(Condition_checker):
+
+
+    #pygame event filter:
+    #{pygame_event_attr: pygame_event_attr_val, ...} or
+    #{pygame_event_attr: [pygame_event_attr_val], ...}
+    #if attr not exists in event - filter not passed
+    #if attr value not equals event value - filter not passed OR
+    # if attr value not in event value list - filter not passed
+    #
+    # example:
+    #{'type': pygame.KEYDOWN, 'key': [pygame.K_UP, pygame.K_w]}
+    # filter only will work on keydown of key Up or 'w'
     def __init__(self, pygame_event_filter):
         Condition_checker.__init__(self)
         self._filter = pygame_event_filter

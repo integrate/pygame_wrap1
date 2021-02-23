@@ -66,7 +66,7 @@ class TextImageGenerator(image_modifier.ImageModifier):
         if "angle" in modification_data and modification_data['angle'] is not None:
             angle = modification_data["angle"]
         else:
-            angle = 90
+            angle = 0
 
         return [im, pos, angle]
 

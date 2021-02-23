@@ -292,15 +292,18 @@ class Sprite_image(pygame.sprite.DirtySprite):
     def get_final_angle(self):
         return Sprite_image.normalize_angle(-self._final_modifier.get_modified_angle())
 
+    def get_sprite_pos(self):
+        return [*self._pos]
+
     def move_sprite_to(self, x, y):
         self._pos[0] = x
         self._pos[1] = y
-        self._update_sprite_data()
+        self._update_rect_from_pos()
 
     def move_sprite_by(self, dx, dy):
         self._pos[0] += dx
         self._pos[1] += dy
-        self._update_sprite_data()
+        self._update_rect_from_pos()
 
     def get_sprite_rect(self):
         return pygame.Rect(self.rect)
@@ -336,40 +339,53 @@ class Sprite_image(pygame.sprite.DirtySprite):
         self.visible = visible
         self.dirty = 1
 
-    def move_sprite_at_angle(self, angle, distance):
+    def calc_point_by_angle_and_distance(self, angle, distance):
         res = math_utils.get_point_by_angle([*self._pos], -angle, distance)
-        self._pos[0] = int(res[0])
-        self._pos[1] = int(res[1])
+        return [int(res[0]), int(res[1])]
 
-        self._update_rect_from_pos()
-
-    def move_sprite_to_angle(self, distance):
-        an = self._final_modifier.get_modified_angle()
-        res = math_utils.get_point_by_angle([*self._pos], an, distance)
-        self._pos[0] = int(res[0])
-        self._pos[1] = int(res[1])
-
-        self._update_rect_from_pos()
-
-    def move_sprite_to_point(self, point, distance):
+    def calc_angle_by_point(self, point):
+        """Returns current angle if point is same as current position"""
         # can't move to same point
         if point[0] == self._pos[0] and point[1] == self._pos[1]:
-            return
+            return None
 
-        an = math_utils.get_angle_by_point(self._pos, point)
+        return Sprite_image.normalize_angle(-math_utils.get_angle_by_point(self._pos, point))
 
-        res = math_utils.get_point_by_angle([*self._pos], an, distance)
-        self._pos[0] = int(res[0])
-        self._pos[1] = int(res[1])
-
-        self._update_rect_from_pos()
-
-    def rotate_to_point(self, point):
-        # can't move to same point
-        if point[0] == self._pos[0] and point[1] == self._pos[1]:
-            return
-
-        an = math_utils.get_angle_by_point(self._pos, point)
+    def calc_angle_modification_by_angle(self, angle_to_look_to):
+        angle_to_look_to = -angle_to_look_to
 
         orig_angle = self._flipper_angle.get_modified_angle()
-        self._rotator.change_angle(an - orig_angle)
+        res = angle_to_look_to - orig_angle
+        return -res
+
+    ######### Methods below are sintax sugar for user.
+    #           Only user methods must be called in body of these functions.
+    def move_sprite_at_angle(self, angle, distance):
+        res = self.calc_point_by_angle_and_distance(angle, distance)
+        self.move_sprite_to(res[0],res[1])
+
+    def move_sprite_to_angle(self, distance):
+        an = self.get_final_angle()
+        res = self.calc_point_by_angle_and_distance(an, distance)
+        self.move_sprite_to(res[0], res[1])
+
+    def move_sprite_to_point(self, point, distance):
+        an = self.calc_angle_by_point(point)
+        if an is None:
+            return
+
+        res = self.calc_point_by_angle_and_distance(an, distance)
+        self.move_sprite_to(res[0], res[1])
+
+    def rotate_to_angle(self, angle_to_look_to):
+        angle_modif = self.calc_angle_modification_by_angle(angle_to_look_to)
+        self.set_angle_modification(angle_modif)
+
+    def rotate_to_point(self, point):
+        angle_to_look_to = self.calc_angle_by_point(point)
+        if angle_to_look_to is None:
+            return
+
+        angle_modif = self.calc_angle_modification_by_angle(angle_to_look_to)
+
+        self.set_angle_modification(angle_modif)

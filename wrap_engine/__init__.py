@@ -7,7 +7,7 @@ from datetime import datetime
 #from wrap_engine.transl import translator as _
 
 now = datetime.now()
-last_allowed_day = datetime(2021, 3, 1)
+last_allowed_day = datetime(2021, 6, 1)
 period = last_allowed_day - now
 if period.days<0:
     print("Library expired!")

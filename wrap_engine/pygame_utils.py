@@ -1,4 +1,4 @@
-import pygame
+import sys, pygame
 
 PYGAME_KMODS = [pygame.KMOD_LSHIFT,
                 pygame.KMOD_RSHIFT,
@@ -19,11 +19,16 @@ PYGAME_KMODS = [pygame.KMOD_LSHIFT,
 
 def key_list_of_pressed_keys(keys_pressed):
     res = []
-    key_index = 0
-    for key_value in keys_pressed:
-        if key_value:
-            res.append(key_index)
-        key_index += 1
+
+    pygame_vars = vars(sys.modules['pygame'])
+    for key_name in pygame_vars:
+        if not key_name.startswith("K_"):
+            continue
+
+        key_value = pygame_vars[key_name]
+        if keys_pressed[key_value]:
+            res.append(key_value)
+
     return res
 
 def control_key_list_of_pressed_keys(control_keys_bitmask):

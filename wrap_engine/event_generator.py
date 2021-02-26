@@ -101,7 +101,11 @@ class Event_generator:
 
         self._clean_timers()
 
-    def process_events(self):
+    def process_events(self, generate_events = True):
+
+        pygame_events = pygame.event.get()
+        if not generate_events:
+            return
 
         pygame_event_id_pool = event_id_pool.Event_id_pool.get_pygame_pool()
 
@@ -109,7 +113,6 @@ class Event_generator:
         _event_types = self._event_types.copy()
 
         # process pygame events
-        pygame_events = pygame.event.get()
         for pev in pygame_events:
             # if type not used
             if pev.type not in PYGAME_EVENT_TYPES_TO_PROCESS and \
@@ -148,3 +151,4 @@ class Event_generator:
             if event_type.confirms():
                 event = event_type.make_event()
                 self.message_broker.notify(event)
+

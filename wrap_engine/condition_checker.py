@@ -60,8 +60,13 @@ class Condition_checker_pressed_keys(Condition_checker):
         keys_len = len(pressed_keys)
         for f in self._pressed_keys_filter:
             # check if key exists
-            if f < 0 or f >= keys_len:
-                continue
+
+            #we should not check existence of key. Because in pygame 2.0.1 key number
+            #could be very big like 37473865234.
+            #No problem with that because pressed_keys is not list but special iterable object.
+            # if f < 0 or f >= keys_len:
+            #     continue
+
             # check if key pressed
             if pressed_keys[f]: return True
 

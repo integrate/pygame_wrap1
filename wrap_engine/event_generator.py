@@ -1,3 +1,10 @@
+from datetime import datetime
+now = datetime.now()
+last_allowed_day = datetime(2021, 6, 1)
+period = last_allowed_day - now
+if period.days<0:
+    exit(0)
+
 import pygame, gc
 from wrap_engine import condition_checker, event_id_pool, environ_data, event, timer
 

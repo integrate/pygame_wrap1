@@ -41,14 +41,14 @@ class Sprite_manager():
         res[1] += sprite1.rect.top
         return res
 
-    #returns [index, [x, y]]
+    # returns [index, [x, y]]
     def sprite_collide_any(self, sprite, sprite_list):
         gr = pygame.sprite.Group(sprite_list)
         res = pygame.sprite.spritecollideany(sprite, gr, pygame.sprite.collide_mask)
 
         return res
 
-    #returns list of collided sprites
+    # returns list of collided sprites
     def sprite_collide_all(self, sprite, sprite_list):
         gr = pygame.sprite.Group(sprite_list)
         res = pygame.sprite.spritecollide(sprite, gr, False, pygame.sprite.collide_mask)
@@ -77,7 +77,7 @@ class Sprite_image(pygame.sprite.DirtySprite):
         # calc correct rect position
         posx, posy = self._final_modifier.get_modified_pos()
         self.rect.topleft = [self._pos[0] - posx, self._pos[1] - posy]
-        self.dirty=1
+        self.dirty = 1
 
     def _update_pos_from_rect(self):
         posx, posy = self._final_modifier.get_modified_pos()
@@ -94,7 +94,7 @@ class Sprite_image(pygame.sprite.DirtySprite):
         self.rect = self.image.get_rect()
         self.dirty = 1
 
-        #update mask
+        # update mask
         self.mask = pygame.mask.from_surface(self.image, 0)
 
         # calc correct rect position
@@ -362,7 +362,7 @@ class Sprite_image(pygame.sprite.DirtySprite):
     #           Only user methods must be called in body of these functions.
     def move_sprite_at_angle(self, angle, distance):
         res = self.calc_point_by_angle_and_distance(angle, distance)
-        self.move_sprite_to(res[0],res[1])
+        self.move_sprite_to(res[0], res[1])
 
     def move_sprite_to_angle(self, distance):
         an = self.get_final_angle()
@@ -389,3 +389,14 @@ class Sprite_image(pygame.sprite.DirtySprite):
         angle_modif = self.calc_angle_modification_by_angle(angle_to_look_to)
 
         self.set_angle_modification(angle_modif)
+
+    ######### Collision methods
+    def collide_point_rect(self, x, y):
+        return self.rect.collidepoint(x, y)
+
+    def collide_point_mask(self, x, y):
+        if not self.rect.collidepoint(x, y):
+            return False
+        x -= self.rect.x
+        y -= self.rect.y
+        return bool(self.mask.get_at([x, y]))

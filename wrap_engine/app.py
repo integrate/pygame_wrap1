@@ -1,5 +1,11 @@
-import pygame, threading
+from datetime import datetime
+now = datetime.now()
+last_allowed_day = datetime(2021, 6, 1)
+period = last_allowed_day - now
+if period.days<0:
+    exit(0)
 
+import pygame, threading
 
 class App:
 

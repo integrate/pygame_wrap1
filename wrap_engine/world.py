@@ -14,6 +14,10 @@ class World:
         self._bkg_pic = None
         self._bkg = pygame.Surface([1000, 1000])
 
+        self._icon_pic = pygame.Surface([32, 32])
+
+        self._cap = ""
+
     def _is_world_created(self):
         return self._window is not None
 
@@ -30,6 +34,14 @@ class World:
         self._bkg = fon
         self._window.blit(self._bkg, [0, 0])
 
+    def _update_icon(self):
+        if self._window is None: return
+        pygame.display.set_icon(self._icon_pic)
+
+    def _update_caption(self):
+        if self._window is None: return
+        pygame.display.set_caption(self._cap)
+
     def _update_sprite_manager(self):
         if self.sprite_manager is None and self._window is not None:
             self.sprite_manager = sprite.Sprite_manager(self._window, self._bkg)
@@ -40,16 +52,22 @@ class World:
 
     def create_world(self, width, height):
         self._window = pygame.display.set_mode([width, height], 0)
+
         self._update_bkg()
         self._update_sprite_manager()
+        self._update_caption()
+        self._update_icon()
 
     def change_world(self, width, height):
         self.create_world(width, height)
 
     def create_world_fullscreen(self):
         self._window = pygame.display.set_mode([0, 0], pygame.FULLSCREEN)
+
         self._update_bkg()
         self._update_sprite_manager()
+        self._update_caption()
+        self._update_icon()
 
     def change_world_fullscreen(self):
         self.create_world_fullscreen()
@@ -76,7 +94,17 @@ class World:
         self._update_bkg()
         self._update_sprite_manager()
 
+    def set_icon(self, path_to_file):
+        pic = pygame.image.load(path_to_file)
+        self._icon_pic = pygame.transform.scale(pic, [32, 32])
+        self._update_icon()
 
+    def set_caption(self, cap):
+        self._cap = str(cap)
+        self._update_caption()
+
+    def get_caption(self):
+        return self._cap
 
     def update(self):
         if not self._is_world_created():

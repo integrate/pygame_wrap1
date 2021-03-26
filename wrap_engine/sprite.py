@@ -252,8 +252,10 @@ class Sprite_image(pygame.sprite.DirtySprite):
         self._set_size_proc(width, height)
 
     def change_size_by_proc(self, proc):
-        orig_w = self._size_modifier.get_size_proc()[0]
-        orig_h = self._size_modifier.get_size_proc()[1]
+        orig_w, orig_h = self._size_modifier.get_size_proc()
+        orig_w = orig_w if orig_w is not None else 100
+        orig_h = orig_h if orig_h is not None else 100
+
         width = proc * orig_w / 100
         height = proc * orig_h / 100
         self._set_size_proc(width, height)

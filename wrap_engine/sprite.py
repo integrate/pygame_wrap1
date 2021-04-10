@@ -187,14 +187,28 @@ class Sprite_image(pygame.sprite.DirtySprite):
         else:
             self._update_size_pix_from_reality()
 
-    def get_width_pix(self):
+
+    #methods get_applied_width_pix/height/size returns sizes which image should be modified to
+    # None means no modification should be applied
+    def get_applied_width_pix(self):
         return self._size_modifier.get_size_pix()[0]
 
-    def get_height_pix(self):
+    def get_applied_height_pix(self):
         return self._size_modifier.get_size_pix()[1]
 
-    def get_size_pix(self):
+    def get_applied_size_pix(self):
         return self._size_modifier.get_size_pix()
+
+    #methods get_width_pix/height/size returns sizes of image after resize but before rotatino and next modifications
+    #None value never returned
+    def get_width_pix(self):
+        return self._size_modifier.get_modified_image().get_width()
+
+    def get_height_pix(self):
+        return self._size_modifier.get_modified_image().get_height()
+
+    def get_size_pix(self):
+        return self._size_modifier.get_modified_image().get_size()
 
     def set_original_size(self):
         self._set_size_pix(None, None)

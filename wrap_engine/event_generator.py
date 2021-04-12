@@ -16,7 +16,7 @@ PYGAME_EVENT_TYPES_TO_PROCESS = [
 ]
 
 pygame.init()
-
+pygame.fastevent.init()
 
 # pygame.key.set_repeat(50)
 
@@ -46,14 +46,40 @@ class Event_generator:
         self._timers[t.get_pygame_event_id()] = t
         return t
 
+    # def _clean_timers(self):
+    #     # finish and remove timers without refs
+    #     for tid in self._timers.copy():
+    #         t = self._timers[tid]
+    #         rc = len(gc.get_referrers(t))
+    #         if rc <= 2:
+    #             t.finish()
+    #             del self._timers[tid]
+
+    @staticmethod
+    def _timer_in_event_types(timer, event_types):
+
+        for et_id, et in event_types.items(): #enumerate event types
+            if not isinstance(et, event.ConditionalEventType): #only check conditional types
+                continue
+
+            if et.has_checker(timer):
+                return True
+
+        return False
+
+
     def _clean_timers(self):
+
         # finish and remove timers without refs
-        for tid in self._timers.copy():
-            t = self._timers[tid]
-            rc = len(gc.get_referrers(t))
-            if rc <= 2:
-                del self._timers[tid]
-                t.finish()
+        timer_ids_to_delete=[]
+        for tid, timer in self._timers.items():
+            if not self._timer_in_event_types(timer, self._event_types):
+                timer.finish()
+                timer_ids_to_delete.append(tid)
+
+        for i in timer_ids_to_delete:
+            del self._timers[i]
+
 
     # delay=None, count=0, force_new=False - создает ограничение по таймеру force_new - создавать новый таймер, иначе пытаться использовать существующий бесконечный с таким же интервалом
     # event_filter - словарь свойствоСобытияPygame:значение. Если значение этот список, то фильтр пройдет если поле события равно любому элементу из списка.
@@ -105,12 +131,13 @@ class Event_generator:
     def stop_event_notification(self, event_type_id):
         # remove event types with id
         self._event_types = {eid: ev for (eid, ev) in self._event_types.items() if eid != event_type_id}
-
         self._clean_timers()
+
 
     def process_events(self, generate_events = True):
 
-        pygame_events = pygame.event.get()
+        # pygame_events = pygame.event.get()
+        pygame_events = pygame.fastevent.get()
         if not generate_events:
             return
 
@@ -142,6 +169,7 @@ class Event_generator:
             for event_id in _event_types:
                 event_type = _event_types[event_id]
                 if event_type.confirms():
+                    # print(event_id, event_type)
                     event = event_type.make_event()
                     self.message_broker.notify(event)
 

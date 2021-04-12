@@ -5,6 +5,8 @@ class Event_id_pool():
     def __init__(self, use_pygame=False):
         object.__init__(self)
 
+        self._use_pygame = use_pygame
+
         if use_pygame:
             self._generator = Pygame_event_id_generator()
         else:
@@ -14,10 +16,13 @@ class Event_id_pool():
         self._busy_ids = []
 
     def get_id(self):
-        if len(self._free_ids) == 0:
+        #bug fixed
+        #reuse id only after 1000 is already free.
+        #otherwise it could be issues
+        if len(self._free_ids) < 1000:
             self._free_ids.append(self._generator.get_id())
 
-        id = self._free_ids.pop(0)
+        id = self._free_ids.pop()
 
         assert id not in self._busy_ids, "Event id is already in use!"
         self._busy_ids.append(id)
@@ -26,7 +31,7 @@ class Event_id_pool():
     def free_id(self, id):
         self._busy_ids = [el for el in self._busy_ids if el != id]
         if id not in self._free_ids:
-            self._free_ids.append(id)
+            self._free_ids.insert(0,id)
 
     def is_id_used_free_or_busy(self, id):
         return id in self._free_ids or \

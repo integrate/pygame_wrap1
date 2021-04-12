@@ -1,5 +1,5 @@
 import pygame
-from wrap_engine import condition_checker as cc, event_id_pool
+from wrap_engine import condition_checker as cc, event_id_pool, timer_starter
 
 TIMER_STATE_PAUSE = 0
 TIMER_STATE_ACTIVE = 1
@@ -14,6 +14,7 @@ class Timer(cc.Condition_checker):
         assert count >= 0, "Timer count must be 0 or greater"
 
         self._pygame_event_id = event_id_pool.Event_id_pool.get_pygame_pool().get_id()
+        self._timer_starter = timer_starter.Pygame_event_timer(self._pygame_event_id, delay)
 
         self.delay = delay
         self.count = count
@@ -30,18 +31,26 @@ class Timer(cc.Condition_checker):
         if self._state == TIMER_STATE_ACTIVE: return
 
         self._state = TIMER_STATE_ACTIVE
-        pygame.time.set_timer(self._pygame_event_id, self.delay)
+
+        # pygame.time.set_timer(self._pygame_event_id, self.delay)
+        self._timer_starter.start()
+        # print("start", self._pygame_event_id, self.delay)
 
     def pause(self):
         assert self._state != TIMER_STATE_FINISHED, "Finished timer can't be paused!"
         if self._state == TIMER_STATE_PAUSE: return
 
         self._state = TIMER_STATE_PAUSE
-        pygame.time.set_timer(self._pygame_event_id, 0)
+
+        # pygame.time.set_timer(self._pygame_event_id, 0)
+        self._timer_starter.pause()
+        # print("pause", self._pygame_event_id, 0)
 
     def finish(self):
         if self._state == TIMER_STATE_ACTIVE:
-            pygame.time.set_timer(self._pygame_event_id, 0)
+            # pygame.time.set_timer(self._pygame_event_id, 0)
+            self._timer_starter.kill()
+            # print("finish", self._pygame_event_id, 0)
 
         self._state = TIMER_STATE_FINISHED
         event_id_pool.Event_id_pool.get_pygame_pool().free_id(self._pygame_event_id)
@@ -67,3 +76,4 @@ class Timer(cc.Condition_checker):
 
     def confirms(self):
         return self._active_is_on
+

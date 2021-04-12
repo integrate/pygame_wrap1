@@ -32,6 +32,9 @@ class ConditionalEventType(EventType):
         EventType.__init__(self)
         self._checkers = [*checkers]
 
+    def has_checker(self, checker):
+        return checker in self._checkers
+
     def confirms(self):
         for ch in self._checkers:
             if not ch.confirms():

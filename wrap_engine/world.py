@@ -96,7 +96,11 @@ class World:
         self._update_sprite_manager()
 
     def set_world_background_image(self, path_to_file, fill=False):
-        self._bkg_pic = pygame.image.load(path_to_file)
+        if path_to_file is None:
+            self._bkg_pic = None
+        else:
+            self._bkg_pic = pygame.image.load(path_to_file)
+
         self._update_bkg()
         self._update_sprite_manager()
 

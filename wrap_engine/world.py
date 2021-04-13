@@ -1,3 +1,4 @@
+import os
 import pygame
 from wrap_engine import sprite
 
@@ -50,7 +51,12 @@ class World:
             self.sprite_manager._set_background(self._bkg)
 
 
-    def create_world(self, width, height):
+    def create_world(self, width, height, start_pos_x:int = None, start_pos_y:int = None):
+
+        #set start position if done
+        if start_pos_x is not None and start_pos_y is not None and self._window is None:
+            os.environ['SDL_VIDEO_WINDOW_POS'] = str(start_pos_x)+", "+str(start_pos_y)
+
         self._window = pygame.display.set_mode([width, height], 0)
 
         self._update_bkg()

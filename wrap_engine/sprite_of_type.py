@@ -7,6 +7,11 @@ class Sprite_of_type(sprite.Sprite_image):
     def __init__(self, sprite_type, x, y, costume_name=None, visible=True):
         self.sprite_type = sprite_type
 
+        #check that type have any costumes
+        if len(self.sprite_type.get_costume_names()) == 0:
+            err = _("Sprite type has no costumes")
+            raise Exception(err)
+
         # if no costume - select first
         if costume_name is None:
             costume_name = self.sprite_type.get_costume_names()[0]

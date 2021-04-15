@@ -6,6 +6,10 @@ class Sprite_type_factory():
 
     @staticmethod
     def create_sprite_type_from_data_source(name, data_source, preload_data = False):
+        all_sprites = [*data_source.get_sprite_types_enumerator()]
+        if name not in all_sprites:
+            return False
+
         costumes = data_source.get_sprite_type_costumes_enumerator(name)
 
         # create sprite and costumes

@@ -41,9 +41,13 @@ def control_key_list_of_pressed_keys(control_keys_bitmask):
 
 def mouse_button_list_of_pressed_buttons(buttons_pressed):
     res = []
-    button_index = 0
-    for button_value in buttons_pressed:
-        if button_value:
-            res.append(button_index)
-        button_index += 1
+    button_map={
+        0: pygame.BUTTON_LEFT,
+        1: pygame.BUTTON_MIDDLE,
+        2: pygame.BUTTON_RIGHT
+    }
+    for button_index, button_value in button_map.items():
+        if button_index<len(buttons_pressed) and buttons_pressed[button_index]:
+            res.append(button_value)
+
     return res

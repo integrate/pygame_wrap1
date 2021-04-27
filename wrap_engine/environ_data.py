@@ -10,7 +10,7 @@ _data = {
 def update_data():
     _data['keys_pressed'] = pygame.key.get_pressed()
     _data['modifier_keys_pressed'] = pygame.key.get_mods()
-    _data['mouse_buttons_pressed'] = pygame.mouse.get_pressed()
+    _data['mouse_buttons_pressed'] = pygame.mouse.get_pressed(num_buttons=5)
 
 def get_data():
     return _data

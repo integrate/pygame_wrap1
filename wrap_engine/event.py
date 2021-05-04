@@ -49,7 +49,27 @@ class ConditionalEventType(EventType):
         for ch in self._checkers:
             types.append(ch.__class__)
 
+        # collect pygame keys pressed data
+        event_data['keys'] = pygame_utils.key_list_of_pressed_keys(
+            environ_data.get_data()['keys_pressed']
+        )
+
+        #collect pygame control keys pressed data
+        event_data['control_keys'] = pygame_utils.control_key_list_of_pressed_keys(
+            environ_data.get_data()['modifier_keys_pressed']
+        )
+
+        #collect pygame mouse buttons pressed data
+        event_data['mouse_buttons'] = pygame_utils.mouse_button_list_of_pressed_buttons(
+            environ_data.get_data()['mouse_buttons_pressed']
+        )
+
+        #collect pygame mouse position
+        event_data['pos'] = pygame.mouse.get_pos()
+
         # collect pygame event data
+        # it must override general event attributes if duplicates exists.
+        # for example - pos on mouse move and general pos
         if condition_checker.Condition_checker_pygame_event in types and \
                 environ_data.is_active_pygame_event_set():
 
@@ -58,24 +78,8 @@ class ConditionalEventType(EventType):
             for attr in pygame_event_data:
                 event_data[attr] = pygame_event_data[attr]
 
-
-        # collect pygame keys pressed data
-        # if condition_checker.Condition_checker_pressed_keys in types:
-        event_data['keys'] = pygame_utils.key_list_of_pressed_keys(
-            environ_data.get_data()['keys_pressed']
-        )
-
-        #collect pygame control keys pressed data
-        # if condition_checker.Condition_checker_pressed_control_keys in types:
-        event_data['control_keys'] = pygame_utils.control_key_list_of_pressed_keys(
-            environ_data.get_data()['modifier_keys_pressed']
-        )
-
-        #collect pygame mouse buttons pressed data
-        # if condition_checker.Condition_checker_mouse_buttons_pressed in types:
-        event_data['mouse_buttons'] = pygame_utils.mouse_button_list_of_pressed_buttons(
-            environ_data.get_data()['mouse_buttons_pressed']
-        )
-        event_data['pos'] = pygame.mouse.get_pos()
+        #repeat some data in more simple way for those who dont know how to use lists yet
+        event_data['pos_x'] = event_data['pos'][0]
+        event_data['pos_y'] = event_data['pos'][1]
 
         return Event(self.id, event_data)

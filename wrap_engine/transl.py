@@ -24,8 +24,10 @@ def _update_translation_func():
     _tr = gettext.translation(domain=TRANSL_DOMAIN, localedir=_translation_dir, fallback=True)
     _translate_func = _tr.gettext
 
-
 def translator(text):
+    text = str(text)
+    if len(text)==0:
+        text = "empty string translated"
     return _translate_func(text)
 
 _update_translation_func()

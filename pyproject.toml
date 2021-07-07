@@ -1,0 +1,29 @@
+[build-system]
+requires = [ #какие пакеты должны быть установлены, чтоб процесс мог работать
+  "build_with_cython >= 0.0.3"
+]
+
+build-backend = "build_with_cython.backend" #пакет, непосредственно выполняющий сборку
+
+[tool.tox]
+legacy_tox_ini = """
+[tox]
+isolated_build = True
+
+envlist = py38_32, py38_64
+
+
+[testenv]
+deps =
+  pytest >= 6.2.4
+
+commands=
+    pytest
+
+[testenv:py38_32]
+basepython=C:\\Program Files (x86)\\Python38-32\\python.exe
+
+
+[testenv:py38_64]
+basepython=C:\\Program Files\\Python38\\python.exe
+"""

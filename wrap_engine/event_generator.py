@@ -1,6 +1,6 @@
 from datetime import datetime
 now = datetime.now()
-last_allowed_day = datetime(2022, 1, 1)
+last_allowed_day = datetime(2022, 7, 1)
 period = last_allowed_day - now
 if period.days<0:
     exit(0)

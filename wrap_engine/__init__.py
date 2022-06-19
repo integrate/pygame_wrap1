@@ -6,7 +6,7 @@ os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = '1'
 
 from datetime import datetime
 now = datetime.now()
-last_allowed_day = datetime(2022, 7, 1)
+last_allowed_day = datetime(2122, 7, 1)
 period = last_allowed_day - now
 if period.days<0:
     exit(0)

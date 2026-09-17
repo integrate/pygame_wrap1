@@ -9,11 +9,11 @@ if "develop" in sys.argv:
 else:
 
     extensions = ("*.py", "*.pyx")
-    list = []
+    l = []
     for extension in extensions:
-        list.extend(glob.glob("wrap_engine/" + extension))
+        l.extend(glob.glob("wrap_engine/" + extension))
 
-    ext = [setuptools.extension.Extension("wrap_engine", list)]
+    ext = [setuptools.extension.Extension("wrap_engine", l)]
 
     setuptools.setup(
         ext_modules=ext
